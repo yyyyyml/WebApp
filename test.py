@@ -2,7 +2,7 @@ from database import UserDatabase, SearchResultsDatabase, LiteratureDatabase
 
 # 创建数据库对象
 # 会在当前路径生成三个.sqlite文件
-user_db = UserDatabase('user_db.sqlite')
+user_db = UserDatabase('users.sqlite')
 search_db = SearchResultsDatabase('search_results.sqlite')
 literature_db = LiteratureDatabase('literature.sqlite')
 
