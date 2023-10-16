@@ -2,6 +2,7 @@ import json
 import math
 from datetime import datetime, time
 from html import unescape
+import re
 from time import localtime, strftime
 
 from baiduspider._spider import BaseSpider
