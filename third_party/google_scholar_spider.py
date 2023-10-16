@@ -308,6 +308,7 @@ def save_data_to_csv(data: pd.DataFrame, path: str, keyword: str) -> None:
 
 
 if __name__ == '__main__':
+    # 用法：python third_party/google_scholar_spider.py --kw "deep learning" --nresults 30 --csvpath "./data" --sortby "cit/year" --plotresults 1
     print("Getting command line arguments...")
     start = time.time()
     GoogleScholarConfig = get_command_line_args()
