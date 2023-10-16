@@ -2,7 +2,7 @@ from google import google_scholar_search
 
 # 示例用法
 query = "Deep Learning"
-results = google_scholar_search(query)
+results = google_scholar_search(query, 3)
 
 for i, result in enumerate(results):
     print(f"Result {i+1}:")

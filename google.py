@@ -1,11 +1,15 @@
+from pprint import pprint
 import requests
 from bs4 import BeautifulSoup
 
-def google_scholar_search(query):
+def google_scholar_search(query, pn=1):
     # 设置搜索URL
     base_url = "https://scholar.google.com/scholar"
     params = {
-        "q": query
+        "as_vis": 1,
+        "as_sdt": "0,5",
+        "start": (pn-1)*10,  # 10表示第二页，每页通常有10个结果
+        "q": query,
     }
 
     # 发送HTTP GET请求
@@ -34,8 +38,10 @@ def google_scholar_search(query):
             citations = result.find("div", class_="gs_flb").find("a", class_=False).get_text()
             pdf_link = None
             
-            result_pdf = results_pdf[index]
-            pdf_id = result_pdf.find("a")["data-clk-atid"]
+            if index < len(results_pdf):
+                result_pdf = results_pdf[index]
+                pdf_id = result_pdf.find("a")["data-clk-atid"]
+            
             result_id = result.find("h3", class_="gs_rt").find("a")["data-clk-atid"]
             # print(result_id)
             # print(pdf_id)
@@ -51,6 +57,8 @@ def google_scholar_search(query):
                 "citations": citations,
                 "pdf_link": pdf_link
             }
+            # pprint(result_info)
+            # print(index)
 
             search_results.append(result_info)
 
