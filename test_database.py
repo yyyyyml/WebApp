@@ -2,9 +2,9 @@ from database import UserDatabase, SearchResultsDatabase, LiteratureDatabase
 
 # 创建数据库对象
 # 会在当前路径生成三个.sqlite文件
-user_db = UserDatabase('users.sqlite')
-search_db = SearchResultsDatabase('search_results.sqlite')
-literature_db = LiteratureDatabase('literature.sqlite')
+user_db = UserDatabase('sqlite/users.sqlite')
+search_db = SearchResultsDatabase('sqlite/search_results.sqlite')
+literature_db = LiteratureDatabase('sqlite/literature.sqlite')
 
 # 添加用户
 user_db.add_user('john_doe', 'password123', 'user', '[]', '[]')
