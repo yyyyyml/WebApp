@@ -1,119 +1,196 @@
 import sqlite3
+import os
+
+# 数据库文件路径
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+USERS_DB = os.path.join(BASE_DIR, 'databases/users.sqlite')
+WEB_ITEMS_DB = os.path.join(BASE_DIR, 'databases/web_items.sqlite')
+LITERATURE_ITEMS_DB = os.path.join(BASE_DIR, 'databases/literature_items.sqlite')
+MESSAGES_DB = os.path.join(BASE_DIR, 'databases/messages.sqlite')
+WEB_FAVORITES_DB = os.path.join(BASE_DIR, 'databases/web_favorites.sqlite')
+WEB_BROWSES_DB = os.path.join(BASE_DIR, 'databases/web_browses.sqlite')
+LITERATURE_FAVORITES_DB = os.path.join(BASE_DIR, 'databases/literature_favorites.sqlite')
+LITERATURE_BROWSES_DB = os.path.join(BASE_DIR, 'databases/literature_browses.sqlite')
+
+def get_user_database():
+    return UserDatabase(USERS_DB)
+
+def get_web_item_database():
+    return WebItemDatabase(WEB_ITEMS_DB)
+
+def get_literature_item_database():
+    return LiteratureItemDatabase(LITERATURE_ITEMS_DB)
+
+def get_message_database():
+    return MessageDatabase(MESSAGES_DB)
+
+def get_web_favorite_database():
+    return WebFavoriteDatabase(WEB_FAVORITES_DB)
+
+def get_web_browse_database():
+    return WebBrowseDatabase(WEB_BROWSES_DB)
+
+def get_literature_favorite_database():
+    return LiteratureFavoriteDatabase(LITERATURE_FAVORITES_DB)
+
+def get_literature_browse_database():
+    return LiteratureBrowseDatabase(LITERATURE_BROWSES_DB)
 
 class UserDatabase:
     def __init__(self, db_file):
-        # 连接到数据库文件
         self.conn = sqlite3.connect(db_file)
-        # 创建游标
         self.cursor = self.conn.cursor()
-        # 创建用户表，如果不存在的话
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS users (
-            username TEXT PRIMARY KEY,
+            id INTEGER PRIMARY KEY,
+            username TEXT UNIQUE,
             password TEXT,
-            permission TEXT,
-            history TEXT,
-            favorites TEXT
+            permission TEXT
         )''')
-        # 提交更改
         self.conn.commit()
 
-    def add_user(self, username, password, permission, history, favorites):
-        # 插入新用户记录
-        self.cursor.execute("INSERT INTO users (username, password, permission, history, favorites) VALUES (?, ?, ?, ?, ?)",
-                            (username, password, permission, history, favorites))
-        # 提交更改
+    def add_user(self, username, password):
+        self.cursor.execute("INSERT INTO users (username, password, permission) VALUES (?, ?, ?)",
+                            (username, password, 'user'))
         self.conn.commit()
     
-    def update_user(self, username, password, permission, history, favorites):
-        # 更新用户信息
-        self.cursor.execute("UPDATE users SET password=?, permission=?, history=?, favorites=? WHERE username=?", (password, permission, history, favorites, username))
-        # 提交更改
+    def update_user(self, user_id, username, password, permission):
+        self.cursor.execute("UPDATE users SET username=?, password=?, permission=? WHERE id=?", 
+                            (username, password, permission, user_id))
         self.conn.commit()
 
-    def delete_user(self, username):
-        # 删除用户记录
-        self.cursor.execute("DELETE FROM users WHERE username=?", (username,))
-        # 提交更改
+    def delete_user(self, user_id):
+        self.cursor.execute("DELETE FROM users WHERE id=?", (user_id,))
         self.conn.commit()
     
     def get_user(self, username):
-        # 获取用户信息
         self.cursor.execute("SELECT * FROM users WHERE username=?", (username,))
-        # 返回一条记录
-        return self.cursor.fetchone()
+        user = self.cursor.fetchone()
+        if user:
+            return {
+                'id': user[0],
+                'username': user[1],
+                'password': user[2],
+                'permission': user[3]
+            }
+        else:
+            return None
 
-class SearchResultsDatabase:
-    def __init__(self, db_file):
-        # 连接到数据库文件
-        self.conn = sqlite3.connect(db_file)
-        # 创建游标
-        self.cursor = self.conn.cursor()
-        # 创建搜索结果表，如果不存在的话
-        self.cursor.execute('''CREATE TABLE IF NOT EXISTS search_results (
-            url TEXT PRIMARY KEY,
-            likes INTEGER
-        )''')
-        # 提交更改
+
+class WebItemDatabase:
+    def add_web_item(self, link, title, origin, snippet, time_origin, likes, favorites, browses):
+        self.cursor.execute("INSERT INTO web_items (link, title, origin, snippet, time_origin, likes, favorites, browses) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                            (link, title, origin, snippet, time_origin, likes, favorites, browses))
         self.conn.commit()
 
-    def add_result(self, url, likes):
-        # 插入新搜索结果
-        self.cursor.execute("INSERT INTO search_results (url, likes) VALUES (?, ?)", (url, likes))
-        # 提交更改
+    def update_web_item(self, web_item_id, link, title, origin, snippet, time_origin, likes, favorites, browses):
+        self.cursor.execute("UPDATE web_items SET link=?, title=?, origin=?, snippet=?, time_origin=?, likes=?, favorites=?, browses=? WHERE id=?", 
+                            (link, title, origin, snippet, time_origin, likes, favorites, browses, web_item_id))
         self.conn.commit()
 
-    def update_result(self, url, likes):
-        # 更新搜索结果的点赞数
-        self.cursor.execute("UPDATE search_results SET likes=? WHERE url=?", (likes, url))
-        # 提交更改
-        self.conn.commit()
-
-    def delete_result(self, url):
-        # 删除搜索结果记录
-        self.cursor.execute("DELETE FROM search_results WHERE url=?", (url,))
-        # 提交更改
+    def delete_web_item(self, web_item_id):
+        self.cursor.execute("DELETE FROM web_items WHERE id=?", (web_item_id,))
         self.conn.commit()
         
-    def get_result(self, url):
-        # 获取搜索结果信息
-        self.cursor.execute("SELECT * FROM search_results WHERE url=?", (url,))
-        # 返回一条记录
+    def get_web_item(self, web_item_id):
+        self.cursor.execute("SELECT * FROM web_items WHERE id=?", (web_item_id,))
         return self.cursor.fetchone()
 
-class LiteratureDatabase:
-    def __init__(self, db_file):
-        # 连接到数据库文件
-        self.conn = sqlite3.connect(db_file)
-        # 创建游标
-        self.cursor = self.conn.cursor()
-        # 创建文献表，如果不存在的话
-        self.cursor.execute('''CREATE TABLE IF NOT EXISTS literature (
-            url TEXT PRIMARY KEY,
-            path TEXT
-        )''')
-        # 提交更改
+
+class LiteratureItemDatabase:
+    def add_literature_item(self, link, title, link_pdf, snippet, author, summary_path, cites, likes, favorites, browses):
+        self.cursor.execute("INSERT INTO literature_items (link, title, link_pdf, snippet, author, summary_path, cites, likes, favorites, browses) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                            (link, title, link_pdf, snippet, author, summary_path, cites, likes, favorites, browses))
         self.conn.commit()
 
-    def add_literature(self, url, path):
-        # 插入新文献记录
-        self.cursor.execute("INSERT INTO literature (url, path) VALUES (?, ?)", (url, path))
-        # 提交更改
+    def update_literature_item(self, literature_item_id, link, title, link_pdf, snippet, author, summary_path, cites, likes, favorites, browses):
+        self.cursor.execute("UPDATE literature_items SET link=?, title=?, link_pdf=?, snippet=?, author=?, summary_path=?, cites=?, likes=?, favorites=?, browses=? WHERE id=?", 
+                            (link, title, link_pdf, snippet, author, summary_path, cites, likes, favorites, browses, literature_item_id))
         self.conn.commit()
 
-    def update_literature(self, url, path):
-        # 更新文献的文件路径
-        self.cursor.execute("UPDATE literature SET path=? WHERE url=?", (path, url))
-        # 提交更改
+    def delete_literature_item(self, literature_item_id):
+        self.cursor.execute("DELETE FROM literature_items WHERE id=?", (literature_item_id,))
         self.conn.commit()
 
-    def delete_literature(self, url):
-        # 删除文献记录
-        self.cursor.execute("DELETE FROM literature WHERE url=?", (url,))
-        # 提交更改
+    def get_literature_item(self, literature_item_id):
+        self.cursor.execute("SELECT * FROM literature_items WHERE id=?", (literature_item_id,))
+        return self.cursor.fetchone()
+
+
+class MessageDatabase:
+    def add_message(self, sender, time, content):
+        self.cursor.execute("INSERT INTO messages (sender, time, content) VALUES (?, ?, ?)",
+                            (sender, time, content))
+        self.conn.commit()
+
+    def update_message(self, message_id, sender, time, content):
+        self.cursor.execute("UPDATE messages SET sender=?, time=?, content=? WHERE id=?", 
+                            (sender, time, content, message_id))
+        self.conn.commit()
+
+    def delete_message(self, message_id):
+        self.cursor.execute("DELETE FROM messages WHERE id=?", (message_id,))
+        self.conn.commit()
+    
+    def get_message(self, message_id):
+        self.cursor.execute("SELECT * FROM messages WHERE id=?", (message_id,))
+        return self.cursor.fetchone()
+
+
+class WebFavoriteDatabase:
+    def add_web_favorite(self, user, link, time_favorite):
+        self.cursor.execute("INSERT INTO web_favorites (user, link, time_favorite) VALUES (?, ?, ?)",
+                            (user, link, time_favorite))
+        self.conn.commit()
+
+    def delete_web_favorite(self, web_favorite_id):
+        self.cursor.execute("DELETE FROM web_favorites WHERE id=?", (web_favorite_id,))
+        self.conn.commit()
+    
+    def get_web_favorite(self, web_favorite_id):
+        self.cursor.execute("SELECT * FROM web_favorites WHERE id=?", (web_favorite_id,))
+        return self.cursor.fetchone()
+
+
+class WebBrowseDatabase:
+    def add_web_browse(self, user, link, time_browse):
+        self.cursor.execute("INSERT INTO web_browses (user, link, time_browse) VALUES (?, ?, ?)",
+                            (user, link, time_browse))
+        self.conn.commit()
+
+    def delete_web_browse(self, web_browse_id):
+        self.cursor.execute("DELETE FROM web_browses WHERE id=?", (web_browse_id,))
+        self.conn.commit()
+
+    def get_web_browse(self, web_browse_id):
+        self.cursor.execute("SELECT * FROM web_browses WHERE id=?", (web_browse_id,))
+        return self.cursor.fetchone()
+
+
+class LiteratureFavoriteDatabase:
+    def add_literature_favorite(self, user, link, time_favorite):
+        self.cursor.execute("INSERT INTO literature_favorites (user, link, time_favorite) VALUES (?, ?, ?)",
+                            (user, link, time_favorite))
         self.conn.commit()
         
-    def get_literature(self, url):
-        # 获取文献信息
-        self.cursor.execute("SELECT * FROM literature WHERE url=?", (url,))
-        # 返回一条记录
+    def delete_literature_favorite(self, literature_favorite_id):
+        self.cursor.execute("DELETE FROM literature_favorites WHERE id=?", (literature_favorite_id,))
+        self.conn.commit()
+    
+    def get_literature_favorite(self, literature_favorite_id):
+        self.cursor.execute("SELECT * FROM literature_favorites WHERE id=?", (literature_favorite_id,))
         return self.cursor.fetchone()
+
+class LiteratureBrowseDatabase:
+    def add_literature_browse(self, user, link, time_browse):
+        self.cursor.execute("INSERT INTO literature_browses (user, link, time_browse) VALUES (?, ?, ?)",
+                            (user, link, time_browse))
+        self.conn.commit()
+
+    def delete_literature_browse(self, literature_browse_id):
+        self.cursor.execute("DELETE FROM literature_browses WHERE id=?", (literature_browse_id,))
+        self.conn.commit()
+    
+    def get_literature_browse(self, literature_browse_id):
+        self.cursor.execute("SELECT * FROM literature_browses WHERE id=?", (literature_browse_id,))
+        return self.cursor.fetchone()
+

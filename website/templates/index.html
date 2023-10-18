@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h1>首页</h1>
+    {% if user %}
+        <p>You are logged in as {{ user.username }}</p>
+    {% else %}
+        <p>You are not logged in</p>
+    {% endif %}
+    <div id="content">
+        <div id="search-box">
+            <form action="{{ url_for('home.search_results') }}" method="get">
+                <input type="text" name="q" placeholder="Search...">
+                <select name="search_type">
+                    <option value="web">Web</option>
+                    <option value="literature">文献</option>
+                </select>
+                <input type="submit" value="Search">
+            </form>
+        </div>
+    </div>
+    <a href="{{ url_for('home.favorites') }}">My Favorites</a>
+    <a href="{{ url_for('home.history') }}">My History</a>
+
+</body>
+</html>

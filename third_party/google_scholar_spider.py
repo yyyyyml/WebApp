@@ -264,7 +264,7 @@ def fetch_data(GoogleScholarConfig: GoogleScholarConfig, session: requests.Sessi
             except:
                 venue.append("Venue not fount")
 
-            rank.append(rank[-1] + 10)
+            rank.append(rank[-1] + 1)
 
         # Delay
         sleep(0.5)
