@@ -1,0 +1,62 @@
+/* style_manage.css */
+/* Add this CSS to your existing CSS file */
+
+/* Center the table horizontally on the page */
+table {
+    margin: 0 auto;
+}
+
+/* Add a border to the table for better separation */
+table {
+    border-collapse: collapse;
+    width: 80%; /* Adjust the width as needed */
+    margin-top: 20px; /* Add top margin for spacing */
+}
+
+/* Style table headers (th) */
+table th {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Style table rows (alternating colors) */
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Style table cells (td) */
+table td {
+    text-align: center;
+    padding: 8px;
+}
+
+/* Add some margin to the buttons */
+form {
+    display: inline;
+    margin: 0;
+}
+
+/* Style buttons and select box (same as previous example) */
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 0;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+select {
+    padding: 8px 12px;
+    font-size: 14px;
+}

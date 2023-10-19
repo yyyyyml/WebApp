@@ -58,8 +58,8 @@ class UserDatabase:
                             (username, password, permission, user_id))
         self.conn.commit()
 
-    def delete_user(self, user_id):
-        self.cursor.execute("DELETE FROM users WHERE id=?", (user_id,))
+    def delete_user(self, username):
+        self.cursor.execute("DELETE FROM users WHERE username=?", (username,))
         self.conn.commit()
     
     def get_user(self, username):
@@ -74,6 +74,25 @@ class UserDatabase:
             }
         else:
             return None
+    
+    def get_all_users(self):
+        self.cursor.execute("SELECT * FROM users")
+        users = self.cursor.fetchall()
+        user_list = []
+        for user in users:
+            user_info = {
+                'id': user[0],
+                'username': user[1],
+                'password': user[2],
+                'permission': user[3]
+            }
+            user_list.append(user_info)
+        return user_list
+    
+    def update_permission(self, username, new_permission):
+        # 更新用户权限
+        self.cursor.execute("UPDATE users SET permission=? WHERE username=?", (new_permission, username))
+        self.conn.commit()
 
 
 class WebItemDatabase:
