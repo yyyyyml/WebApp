@@ -77,6 +77,22 @@ class UserDatabase:
 
 
 class WebItemDatabase:
+    def __init__(self, db_file):
+        self.conn = sqlite3.connect(db_file)
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS web_items (
+            id INTEGER PRIMARY KEY,
+            link TEXT UNIQUE,
+            title TEXT,
+            origin TEXT,
+            snippet TEXT,
+            time_origin TEXT,
+            likes INTEGER,
+            favorites INTEGER,
+            browses INTEGER
+        )''')
+        self.conn.commit()
+        
     def add_web_item(self, link, title, origin, snippet, time_origin, likes, favorites, browses):
         self.cursor.execute("INSERT INTO web_items (link, title, origin, snippet, time_origin, likes, favorites, browses) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                             (link, title, origin, snippet, time_origin, likes, favorites, browses))
@@ -97,6 +113,24 @@ class WebItemDatabase:
 
 
 class LiteratureItemDatabase:
+    def __init__(self, db_file):
+        self.conn = sqlite3.connect(db_file)
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS literature_items (
+            id INTEGER PRIMARY KEY,
+            link TEXT UNIQUE,
+            title TEXT,
+            link_pdf TEXT,
+            snippet TEXT,
+            author TEXT,
+            summary_path TEXT,
+            cites INTEGER,
+            likes INTEGER,
+            favorites INTEGER,
+            browses INTEGER
+        )''')
+        self.conn.commit()
+        
     def add_literature_item(self, link, title, link_pdf, snippet, author, summary_path, cites, likes, favorites, browses):
         self.cursor.execute("INSERT INTO literature_items (link, title, link_pdf, snippet, author, summary_path, cites, likes, favorites, browses) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                             (link, title, link_pdf, snippet, author, summary_path, cites, likes, favorites, browses))
@@ -117,6 +151,17 @@ class LiteratureItemDatabase:
 
 
 class MessageDatabase:
+    def __init__(self, db_file):
+        self.conn = sqlite3.connect(db_file)
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS messages (
+            id INTEGER PRIMARY KEY,
+            sender TEXT,
+            time TEXT,
+            content TEXT
+        )''')
+        self.conn.commit()
+        
     def add_message(self, sender, time, content):
         self.cursor.execute("INSERT INTO messages (sender, time, content) VALUES (?, ?, ?)",
                             (sender, time, content))
@@ -137,6 +182,17 @@ class MessageDatabase:
 
 
 class WebFavoriteDatabase:
+    def __init__(self, db_file):
+        self.conn = sqlite3.connect(db_file)
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS web_favorites (
+            id INTEGER PRIMARY KEY,
+            user TEXT,
+            link TEXT,
+            time_favorite INTEGER
+        )''')
+        self.conn.commit()
+        
     def add_web_favorite(self, user, link, time_favorite):
         self.cursor.execute("INSERT INTO web_favorites (user, link, time_favorite) VALUES (?, ?, ?)",
                             (user, link, time_favorite))
@@ -152,6 +208,17 @@ class WebFavoriteDatabase:
 
 
 class WebBrowseDatabase:
+    def __init__(self, db_file):
+        self.conn = sqlite3.connect(db_file)
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS web_browses (
+            id INTEGER PRIMARY KEY,
+            user TEXT,
+            link TEXT,
+            time_browse INTEGER
+        )''')
+        self.conn.commit()
+        
     def add_web_browse(self, user, link, time_browse):
         self.cursor.execute("INSERT INTO web_browses (user, link, time_browse) VALUES (?, ?, ?)",
                             (user, link, time_browse))
@@ -167,6 +234,17 @@ class WebBrowseDatabase:
 
 
 class LiteratureFavoriteDatabase:
+    def __init__(self, db_file):
+        self.conn = sqlite3.connect(db_file)
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS literature_favorites (
+            id INTEGER PRIMARY KEY,
+            user TEXT,
+            link TEXT,
+            time_favorite INTEGER
+        )''')
+        self.conn.commit()
+        
     def add_literature_favorite(self, user, link, time_favorite):
         self.cursor.execute("INSERT INTO literature_favorites (user, link, time_favorite) VALUES (?, ?, ?)",
                             (user, link, time_favorite))
@@ -181,6 +259,17 @@ class LiteratureFavoriteDatabase:
         return self.cursor.fetchone()
 
 class LiteratureBrowseDatabase:
+    def __init__(self, db_file):
+        self.conn = sqlite3.connect(db_file)
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS literature_browses (
+            id INTEGER PRIMARY KEY,
+            user TEXT,
+            link TEXT,
+            time_browse INTEGER
+        )''')
+        self.conn.commit()
+        
     def add_literature_browse(self, user, link, time_browse):
         self.cursor.execute("INSERT INTO literature_browses (user, link, time_browse) VALUES (?, ?, ?)",
                             (user, link, time_browse))
