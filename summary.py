@@ -778,7 +778,8 @@ def chat_paper_main(args):
     [print(paper_index, paper_name.path.split('\\')[-1]) for paper_index, paper_name in enumerate(paper_list)]
     reader1.summary_with_chat(paper_list=paper_list)
 
-
+def get_summary(path):
+    return 'README.md'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

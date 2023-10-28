@@ -1,6 +1,21 @@
-<!DOCTYPE html>
-<html>
-<body>
-    <h1>总结界面</h1>
-</body>
-</html>
+<!-- summary.html -->
+<!-- ... -->
+<div class="right">
+    <h2>文献内容</h2>
+    <div class="literature-content">
+        {% if literature_content %}
+            <pre>{{ literature_content }}</pre>
+        {% else %}
+            <p>尚未上传文献文件</p>
+        {% endif %}
+    </div>
+    <h2>总结内容</h2>
+    <div class="summary-content">
+        {% if summary_content %}
+            <pre>{{ summary_content }}</pre>
+        {% else %}
+            <p>暂无总结内容</p>
+        {% endif %}
+    </div>
+</div>
+<!-- ... -->
