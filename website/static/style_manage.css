@@ -4,9 +4,13 @@
 /* Center the table horizontally on the page */
 table {
     margin: 0 auto;
+}
+
+/* Add a border to the table for better separation */
+table {
+    border-collapse: collapse;
     width: 80%; /* Adjust the width as needed */
     margin-top: 20px; /* Add top margin for spacing */
-    border-collapse: collapse; /* Add a border to the table for better separation */
 }
 
 /* Style table headers (th) */
@@ -34,7 +38,7 @@ form {
     margin: 0;
 }
 
-/* Style buttons and select box */
+/* Style buttons and select box (same as previous example) */
 button {
     background-color: #4CAF50;
     color: white;
@@ -55,39 +59,4 @@ button:hover {
 select {
     padding: 8px 12px;
     font-size: 14px;
-}
-
-/* Define .tabs class for the tabs container */
-.tabs {
-    display: flex;
-    justify-content: space-between;
-    background-color: #333;
-    padding: 10px;
-}
-
-/* Define .tab class for the tabs */
-.tab {
-    flex: 1;
-    text-align: center;
-    background-color: #444;
-    color: white;
-    cursor: pointer;
-    padding: 10px;
-}
-
-/* Define .fullscreen class to display a section in full screen */
-.fullscreen-container {
-    position: relative;
-}
-
-.fullscreen {
-    display: block;
-    background-color: #fff;
-    padding: 20px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow-y: auto; /* Add vertical scroll if needed */
 }

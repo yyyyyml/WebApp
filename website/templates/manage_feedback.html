@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_manage.css') }}">
+    <title>User Feedback</title>
+</head>
+<body>
+    <h1>用户反馈</h1>
+    <table>
+        <tr>
+            <th>发送者</th>
+            <th>时间</th>
+            <th>内容</th>
+        </tr>
+        {% for message in messages %}
+        <tr>
+            <td>{{ message.sender }}</td>
+            <td>{{ message.time }}</td>
+            <td>{{ message.content }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,6 +1,42 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+</head>
 <body>
     <h1>文献搜索结果</h1>
+    <form action="{{ url_for('result_ctrl.search_results') }}" method="get">
+        <input type="text" name="q" placeholder="Search...">
+            <select name="search_type">
+                    <option value="web">Web</option>
+                    <option value="literature">文献</option>
+            </select>
+        <input type="submit" value="Search">
+    </form>
+
+    <dl>
+        {% for key,value in dic.items() %}
+        <a href='{{value["link"]}}'> {{value["title"]}}</a>
+        &nbsp
+        <a href='/good?url={{value["link"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pdf_link={{value["pdf_link"]}}'>赞</a>
+        &nbsp
+        <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pdf_link={{value["pdf_link"]}}'>踩</a>
+        <dd>{{value["snippet"]}}</dd>
+        <dd>{{value["authors"],value["citations"]}}</dd>
+        <a href='{{value["pdf_link"]}}'>.pdf</a>
+        <a href='/summary?url={{value["pdf_link"]}}'>总结</a>
+        <br>
+        {% endfor %}
+    </dl>
+
+    <ul>
+        <h2>点赞数最多的结果</h2>
+        <a href='{{maxlike_url}}'> {{maxlike_title}}</a>
+        &nbsp
+        <a href='{{maxlike_pdf}}'>.pdf</a>
+    </ul>
+    <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn+1)) }}">下一页</a>
+    <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn-1)) }}">上一页</a>
 </body>
 </html>

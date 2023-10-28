@@ -1,6 +1,46 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+</head>
 <body>
-    <h1>网页搜索结果</h1>
+    <h1>搜索结果</h1>
+    <form action="{{ url_for('result_ctrl.search_results') }}" method="get">
+        <input type="text" name="q" placeholder="Search...">
+            <select name="search_type">
+                    <option value="web">Web</option>
+                    <option value="literature">文献</option>
+            </select>
+        <input type="submit" value="Search">
+    </form>
+
+    <dl>
+        {% for key,value in dic.items() %}
+        <a href='{{value["url"]}}'> {{value["title"]}}</a>
+        &nbsp
+        <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}'>赞</a>
+        &nbsp
+        <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}'>踩</a>
+        <dd>{{value["des"]}}</dd>
+        <dd>{{value["origin"],value["time"]}}</dd>
+        <br>
+        {% endfor %}
+    </dl>
+
+    <ul>
+        <h2>相关推荐</h2>
+        {% for key,value in relate.items() %}
+        <a href="/rela_results?str={{value}}">{{value}}</a>
+        {% endfor %}
+    </ul>
+
+    <ul>
+        <h2>点赞数最多的结果</h2>
+        <a href='{{maxlike_url}}'> {{maxlike_title}}</a>
+    </ul>
+
+    <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn+1)) }}">下一页</a>
+    <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn-1)) }}">上一页</a>
 </body>
 </html>

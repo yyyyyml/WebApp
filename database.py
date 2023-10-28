@@ -130,6 +130,24 @@ class WebItemDatabase:
         self.cursor.execute("SELECT * FROM web_items WHERE id=?", (web_item_id,))
         return self.cursor.fetchone()
 
+    def get_web(self, title):
+        self.cursor.execute("SELECT * FROM web_items WHERE title=?", (title,))
+        webr = self.cursor.fetchone()
+        if webr:
+            return {
+                'id': webr[0],
+                'link': webr[1],
+                'title': webr[2],
+                'origin': webr[3],
+                'snippet': webr[4],
+                'time_origin': webr[5],
+                'likes': webr[6],
+                'favorites': webr[7],
+                'browses': webr[8]
+            }
+        else:
+            return None
+
 
 class LiteratureItemDatabase:
     def __init__(self, db_file):
@@ -168,6 +186,26 @@ class LiteratureItemDatabase:
         self.cursor.execute("SELECT * FROM literature_items WHERE id=?", (literature_item_id,))
         return self.cursor.fetchone()
 
+    def get_lit(self, title):
+        self.cursor.execute("SELECT * FROM literature_items WHERE title=?", (title,))
+        litr = self.cursor.fetchone()
+        if litr:
+            return {
+                'id': litr[0],
+                'link': litr[1],
+                'title': litr[2],
+                'link_pdf': litr[3],
+                'snippet': litr[4],
+                'author': litr[5],
+                'summary_path':litr[6],
+                'cites':litr[7],
+                'likes': litr[8],
+                'favorites': litr[9],
+                'browses': litr[10]
+            }
+        else:
+            return None
+
 
 class MessageDatabase:
     def __init__(self, db_file):
@@ -198,6 +236,21 @@ class MessageDatabase:
     def get_message(self, message_id):
         self.cursor.execute("SELECT * FROM messages WHERE id=?", (message_id,))
         return self.cursor.fetchone()
+    
+    def get_all_messages(self):
+        self.cursor.execute("SELECT * FROM messages")
+        messages = self.cursor.fetchall()
+        message_list = []
+        for message in messages:
+            message_info = {
+                'id': message[0],
+                'sender': message[1],
+                'time': message[2],
+                'content': message[3]
+            }
+            message_list.append(message_info)
+        return message_list
+
 
 
 class WebFavoriteDatabase:

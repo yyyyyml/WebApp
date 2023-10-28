@@ -1,21 +1,21 @@
-<!-- summary.html -->
-<!-- ... -->
-<div class="right">
-    <h2>文献内容</h2>
-    <div class="literature-content">
-        {% if literature_content %}
-            <pre>{{ literature_content }}</pre>
-        {% else %}
-            <p>尚未上传文献文件</p>
-        {% endif %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_summary.css') }}">
+    <title>文献总结</title>
+</head>
+<body>
+    <div class="container">
+        <div class="pdf-panel">
+            <object data="{{ local_pdf_path }}" type="application/pdf" width="100%" height="100%">
+                <p>无法加载 PDF 文件。请检查文件路径或 <a href="{{ local_pdf_path }}">下载 PDF 文件</a> 并在外部查看。</p>
+            </object>
+        </div>
+        <div class="right-panel">
+            <div class="markdown-content">
+                {{ summary_content | safe }}
+            </div>
+        </div>
     </div>
-    <h2>总结内容</h2>
-    <div class="summary-content">
-        {% if summary_content %}
-            <pre>{{ summary_content }}</pre>
-        {% else %}
-            <p>暂无总结内容</p>
-        {% endif %}
-    </div>
-</div>
-<!-- ... -->
+</body>
+</html>

@@ -779,7 +779,7 @@ def chat_paper_main(args):
     reader1.summary_with_chat(paper_list=paper_list)
 
 def get_summary(path):
-    return 'README.md'
+    return 'summary\demo.md'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
