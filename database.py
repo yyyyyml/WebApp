@@ -205,6 +205,30 @@ class LiteratureItemDatabase:
             }
         else:
             return None
+        
+    def add_or_update_summary_path(self, link_pdf, summary_path):
+        # 检查数据库中是否已存在给定 link_pdf
+        self.cursor.execute("SELECT id FROM literature_items WHERE link_pdf=?", (link_pdf,))
+        existing_id = self.cursor.fetchone()
+
+        if existing_id:
+            # 如果 link_pdf 已存在，更新其 summary_path
+            self.cursor.execute("UPDATE literature_items SET summary_path=? WHERE id=?", (summary_path, existing_id[0]))
+            self.conn.commit()
+        else:
+            # 如果 link_pdf 不存在，添加新记录
+            self.cursor.execute("INSERT INTO literature_items (link_pdf, summary_path) VALUES (?, ?)", (link_pdf, summary_path))
+            self.conn.commit()
+            
+    def get_summary_path(self, link_pdf):
+        self.cursor.execute("SELECT summary_path FROM literature_items WHERE link_pdf=?", (link_pdf,))
+        result = self.cursor.fetchone()
+        if result:
+            return result[0]
+        else:
+            return None
+
+
 
 
 class MessageDatabase:

@@ -7,9 +7,9 @@
 <body>
     <div class="container">
         <div class="pdf-panel">
-            <object data="{{ local_pdf_path }}" type="application/pdf" width="100%" height="100%">
-                <p>无法加载 PDF 文件。请检查文件路径或 <a href="{{ local_pdf_path }}">下载 PDF 文件</a> 并在外部查看。</p>
-            </object>
+            <iframe src="{{ url_for('summary_ctrl.pdf', filename=paper_filename) }}" style="width:100%; height:100%;" frameborder="0">
+                <p>无法加载 PDF 文件。请检查文件路径或 <a href="{{ url_for('summary_ctrl.pdf', filename=paper_filename) }}">下载 PDF 文件</a> 并在外部查看。</p>
+            </iframe>
         </div>
         <div class="right-panel">
             <div class="markdown-content">
