@@ -13,27 +13,34 @@ summary_ctrl = Blueprint('summary_ctrl', __name__)
 def summary():
     # 获取文献的 URL 参数
     url = request.args.get('url')
-
-    # 将 URL 进行处理以作为文件名
-    paper_filename = url.replace('/', '_').replace(':', '_').replace('?', '_')
-
-    # 检查文件是否已存在，如果存在则不重新写入
-    pdf_path = os.path.join('papers', paper_filename)
+    pdf_path = request.args.get('pdf_path')
+    pdf_filename = request.args.get('pdf_filename')
+    if pdf_path == None:
+        # 将 URL 进行处理以作为文件名
+        paper_filename = url.replace('/', '_').replace(':', '_').replace('?', '_')
+        # 检查文件是否已存在，如果存在则不重新写入
+        pdf_path = os.path.join('papers', paper_filename)
+    else:
+        url = pdf_path
+        paper_filename = pdf_filename
+        
     if not os.path.exists(pdf_path):
         response = requests.get(url)
         with open(pdf_path, 'wb') as pdf_file:
             pdf_file.write(response.content)
 
-    # 使用数据库操作获取 summary_path
+    # 使用数据库操作获取 summary_filename
     literature_item_db = get_literature_item_database()
-    summary_path = literature_item_db.get_summary_path(url)
+    summary_filename = literature_item_db.get_summary_path(url)
 
-    if summary_path is None:
-        # 如果 summary_path 不存在，调用 get_summary 函数生成总结文档
-        summary_path = get_summary(pdf_path)
+    if summary_filename is None:
+        # 如果 summary_filename 不存在，调用 get_summary 函数生成总结文档
+        summary_filename = get_summary(pdf_path)
         # 使用数据库操作添加或更新 summary_path
-        literature_item_db.add_or_update_summary_path(url, summary_path)
+        literature_item_db.add_or_update_summary_path(url, summary_filename)
 
+    summary_path = os.path.join('summary', summary_filename)
+    # summary_path = summary_filename
     # 读取 md 文件的内容
     summary_content = ""
     if os.path.exists(summary_path):
@@ -45,7 +52,20 @@ def summary():
     return render_template('summary.html', paper_filename=paper_filename, summary_content=html_content)
 
 
+@summary_ctrl.route('/upload_pdf', methods=['POST'])
+def upload_pdf():
+    if 'pdf_file' in request.files:
+        pdf_file = request.files['pdf_file']
+        if pdf_file.filename != '':
+            # Generate a unique filename for the uploaded file
+            pdf_filename = pdf_file.filename
+            pdf_path = os.path.join('papers', pdf_filename)
+            pdf_file.save(pdf_path)
 
+            # Pass the file path to the summary page
+            return redirect(url_for('summary_ctrl.summary', pdf_path=pdf_path, pdf_filename=pdf_filename))
+
+    return redirect(url_for('summary_ctrl.summary'))
 
 @summary_ctrl.route('/pdf/<filename>')
 def pdf(filename):
