@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Search</title>
 </head>
+
 <body>
     <h1>搜索结果</h1>
     <form action="{{ url_for('result_ctrl.search_results') }}" method="get">
         <input type="text" name="q" placeholder="Search...">
-            <select name="search_type">
-                    <option value="web">Web</option>
-                    <option value="literature">文献</option>
-            </select>
+        <select name="search_type">
+            <option value="web">Web</option>
+            <option value="literature">文献</option>
+        </select>
         <input type="submit" value="Search">
     </form>
 
     <dl>
         {% for key,value in dic.items() %}
-        <a href='{{value["url"]}}'> {{value["title"]}}</a>
+        <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}'>{{value["title"]}}</a>
         &nbsp
-        <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}'>赞</a>
+        <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}'>赞</a>
         &nbsp
-        <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}'>踩</a>
+        <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}'>踩</a>
+        &nbsp
+        <a
+            href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}'>收藏</a>
         <dd>{{value["des"]}}</dd>
         <dd>{{value["origin"],value["time"]}}</dd>
         <br>
@@ -43,4 +48,5 @@
     <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn+1)) }}">下一页</a>
     <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn-1)) }}">上一页</a>
 </body>
+
 </html>

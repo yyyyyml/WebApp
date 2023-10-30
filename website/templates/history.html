@@ -1,6 +1,50 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
+
+<head>
+    <title>My history</title>
+</head>
+
 <body>
-    <h1>我的历史</h1>
+    <h1>Web history</h1>
+    <table>
+        <tr>
+            <th>用户</th>
+            <th>链接</th>
+            <th>时间</th>
+            <th>操作</th>
+        </tr>
+        {% for history in web %}
+        <tr>
+            <td>{{ history.user }}</td>
+            <td>{{ history.link }}</td>
+            <td>{{ history.time}}</td>
+            <td>
+                <a href="/del_web?id={{history.id}}">删除</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h1>literature history</h1>
+    <table>
+        <tr>
+            <th>用户</th>
+            <th>链接</th>
+            <th>时间</th>
+            <th>操作</th>
+        </tr>
+        {% for history in lit %}
+        <tr>
+            <td>{{ history.user }}</td>
+            <td>{{ history.link }}</td>
+            <td>{{ history.time}}</td>
+            <td>
+                <a href="/del_lit?id={{history.id}}">删除</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
+
 </html>

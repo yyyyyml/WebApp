@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_index.css') }}">
-    </head>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_index.css') }}">
+</head>
+
 <body>
     <h1>首页</h1>
     {% if user %}
-        <p>You are logged in as {{ user.username }}</p>
+    <p>You are logged in as {{ user.username }}</p>
     {% else %}
-        <p>You are not logged in</p>
+    <p>You are not logged in</p>
     {% endif %}
     <div id="content">
         <div id="search-box">
-            <form action="{{ url_for('result_ctrl.search_results',pn='1') }}" method="get">
+            <form action="{{ url_for('result_ctrl.search_results',pn='1',username=user.username) }}" method="get">
                 <input type="text" name="q" placeholder="Search...">
                 <select name="search_type">
                     <option value="web">Web</option>
                     <option value="literature">文献</option>
                 </select>
                 <input type="hidden" name="pn" value="1">
+                <input type="hidden" name="username" value={{user.username}}>
                 <input type="submit" value="Search">
             </form>
         </div>
@@ -30,15 +33,10 @@
         </div> 
         
     </div>
-    <a href="{{ url_for('relation_ctrl.favorites') }}">My Favorites</a>
-    <a href="{{ url_for('relation_ctrl.history') }}">My History</a>
+    <a href="{{ url_for('relation_ctrl.favorites', username=user.username) }}">My Favorites</a>
+    <a href="{{ url_for('relation_ctrl.history', username=user.username) }}">My History</a>
     <a href="{{ url_for('relation_ctrl.judge', username=user.username) }}">Judge</a>
 
-
-    
-
-
-    
-
 </body>
+
 </html>

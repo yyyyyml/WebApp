@@ -3,6 +3,7 @@ import database
 from baiduspider import BaiduSpider
 import google1
 import json
+import datetime
 
 # from google import google_scholar_search
 
@@ -14,7 +15,9 @@ def search_results():
     query = request.args.get('q')
     search_type = request.args.get('search_type')
     pn = request.args.get('pn')
-    print(type(pn))
+    username = request.args.get('username')
+    #print(username)
+    #print(type(pn))
     pn = int(pn)
     if search_type == 'web':
         spider = BaiduSpider(
@@ -38,7 +41,7 @@ def search_results():
                 maxlike_title = web['title']
                 maxlike = web['likes']
         return render_template('web_search_results.html', dic=d, relate=dr, query=query, search_type=search_type,
-                               maxlike_title=maxlike_title, maxlike_url=maxlike_url, pn=pn)
+                               maxlike_title=maxlike_title, maxlike_url=maxlike_url, pn=pn, username=username)
     elif search_type == 'literature':
         result = google1.google_scholar_search(query,pn)
         d = dict()
@@ -59,7 +62,7 @@ def search_results():
                 maxlike_pdf = lit['link_pdf']
                 maxlike = lit['likes']
         return render_template('literature_search_results.html', dic=d, query=query, search_type=search_type,
-                               maxlike_title=maxlike_title, maxlike_url=maxlike_url, maxlike_pdf=maxlike_pdf,pn=pn)
+                               maxlike_title=maxlike_title, maxlike_url=maxlike_url, maxlike_pdf=maxlike_pdf,pn=pn, username=username)
 
 
 @result_ctrl.route('/good')
@@ -68,6 +71,8 @@ def good():
     title = request.args.get('title')
     query = request.args.get('query')
     search_type = request.args.get('search_type')
+    pn = request.args.get('pn')
+    username = request.args.get('username')
     if search_type == 'web':
         web_db = database.get_web_item_database()
         web = web_db.get_web(title)
@@ -76,7 +81,7 @@ def good():
         else:
             web_db.update_web_item(web['id'], url, web['title'], web['origin'], web['snippet'], web['time_origin'],
                                    web['likes'] + 1, web['favorites'], web['browses'])
-        return redirect('/search_results?q=' + query + '&search_type=' + search_type)
+        return redirect('/search_results?q=' + query + '&search_type=' + search_type + '&pn=' + pn + '&username=' + username)
     elif search_type == 'literature':
         pdf_link = request.args.get('pdf_link')
         # summary_path = request.args.get('summary_path')
@@ -88,7 +93,7 @@ def good():
             lit_db.update_literature_item(lit['id'], url, lit['title'], lit['link_pdf'], lit['snippet'], lit['author'],
                                           lit['summary_path'], lit['cites'],
                                           lit['likes'] + 1, lit['favorites'], lit['browses'])
-        return redirect('/search_results?q=' + query + '&search_type=' + search_type)
+        return redirect('/search_results?q=' + query + '&search_type=' + search_type + '&pn=' + pn + '&username=' + username)
 
 
 @result_ctrl.route('/bad')
@@ -97,6 +102,8 @@ def bad():
     title = request.args.get('title')
     query = request.args.get('query')
     search_type = request.args.get('search_type')
+    pn = request.args.get('pn')
+    username = request.args.get('username')
     if search_type == 'web':
         web_db = database.get_web_item_database()
         web = web_db.get_web(title)
@@ -105,7 +112,7 @@ def bad():
         else:
             web_db.update_web_item(web['id'], url, web['title'], web['origin'], web['snippet'], web['time_origin'],
                                    web['likes'] - 1, web['favorites'], web['browses'])
-        return redirect('/search_results?q=' + query + '&search_type=' + search_type)
+        return redirect('/search_results?q=' + query + '&search_type=' + search_type + '&pn=' + pn + '&username=' + username)
     elif search_type == 'literature':
         pdf_link = request.args.get('pdf_link')
         # summary_path = request.args.get('summary_path')
@@ -117,4 +124,51 @@ def bad():
             lit_db.update_literature_item(lit['id'], url, lit['title'], lit['link_pdf'], lit['snippet'], lit['author'],
                                           lit['summary_path'], lit['cites'],
                                           lit['likes'] - 1, lit['favorites'], lit['browses'])
-        return redirect('/search_results?q=' + query + '&search_type=' + search_type)
+        return redirect('/search_results?q=' + query + '&search_type=' + search_type + '&pn=' + pn + '&username=' + username)
+
+@result_ctrl.route('/browse')
+def browse():
+    url = request.args.get('url')
+    search_type = request.args.get('search_type')
+    username = request.args.get('username')
+    #print(username)
+    if search_type == 'web':
+        web_db = database.get_web_browse_database()
+        time = datetime.datetime.now()
+        time_now = str(time.year)+'.'+str(time.month)+'.'+str(time.day)+','+str(time.hour)+':'+str(time.minute)
+        web_db.add_web_browse(username,url,time_now)
+        #print('done')
+        return redirect(url)
+    elif search_type == 'literature':
+        #pdf_link = request.args.get('pdf_link')
+        # summary_path = request.args.get('summary_path')
+        lit_db = database.get_literature_browse_database()
+        time = datetime.datetime.now()
+        time_now = str(time.year)+'.'+str(time.month)+'.'+str(time.day)+','+str(time.hour)+':'+str(time.minute)
+        lit_db.add_literature_browse(username,url,time_now)
+        return redirect(url)
+    
+@result_ctrl.route('/favorite')
+def favorite():
+    url = request.args.get('url')
+    title = request.args.get('title')
+    query = request.args.get('query')
+    search_type = request.args.get('search_type')
+    username = request.args.get('username')
+    pn = request.args.get('pn')
+    #print(username)
+    if search_type == 'web':
+        web_db = database.get_web_favorite_database()
+        time = datetime.datetime.now()
+        time_now = str(time.year)+'.'+str(time.month)+'.'+str(time.day)+','+str(time.hour)+':'+str(time.minute)
+        web_db.add_web_favorite(username,url,time_now)
+        #print('done')
+        return redirect('/search_results?q=' + query + '&search_type=' + search_type + '&pn=' + pn + '&username=' + username)
+    elif search_type == 'literature':
+        #pdf_link = request.args.get('pdf_link')
+        # summary_path = request.args.get('summary_path')
+        lit_db = database.get_literature_favorite_database()
+        time = datetime.datetime.now()
+        time_now = str(time.year)+'.'+str(time.month)+'.'+str(time.day)+','+str(time.hour)+':'+str(time.minute)
+        lit_db.add_literature_favorite(username,url,time_now)
+        return redirect('/search_results?q=' + query + '&search_type=' + search_type + '&pn=' + pn + '&username=' + username)

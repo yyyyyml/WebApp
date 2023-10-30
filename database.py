@@ -285,7 +285,7 @@ class WebFavoriteDatabase:
             id INTEGER PRIMARY KEY,
             user TEXT,
             link TEXT,
-            time_favorite INTEGER
+            time_favorite TEXT
         )''')
         self.conn.commit()
         
@@ -301,6 +301,21 @@ class WebFavoriteDatabase:
     def get_web_favorite(self, web_favorite_id):
         self.cursor.execute("SELECT * FROM web_favorites WHERE id=?", (web_favorite_id,))
         return self.cursor.fetchone()
+    
+    def get_all_favorite(self):
+        self.cursor.execute("SELECT * FROM web_favorites")
+        favorites = self.cursor.fetchall()
+        favorite_list = []
+        for favorite in favorites:
+            favorite_info = {
+                'id': favorite[0],
+                'user': favorite[1],
+                'link': favorite[2],
+                'time': favorite[3]
+            }
+            favorite_list.append(favorite_info)
+        return favorite_list
+        
 
 
 class WebBrowseDatabase:
@@ -311,7 +326,7 @@ class WebBrowseDatabase:
             id INTEGER PRIMARY KEY,
             user TEXT,
             link TEXT,
-            time_browse INTEGER
+            time_browse TEXT
         )''')
         self.conn.commit()
         
@@ -327,6 +342,20 @@ class WebBrowseDatabase:
     def get_web_browse(self, web_browse_id):
         self.cursor.execute("SELECT * FROM web_browses WHERE id=?", (web_browse_id,))
         return self.cursor.fetchone()
+    
+    def get_all_history(self):
+        self.cursor.execute("SELECT * FROM web_browses")
+        historys = self.cursor.fetchall()
+        history_list = []
+        for history in historys:
+            history_info = {
+                'id': history[0],
+                'user': history[1],
+                'link': history[2],
+                'time': history[3]
+            }
+            history_list.append(history_info)
+        return history_list
 
 
 class LiteratureFavoriteDatabase:
@@ -337,7 +366,7 @@ class LiteratureFavoriteDatabase:
             id INTEGER PRIMARY KEY,
             user TEXT,
             link TEXT,
-            time_favorite INTEGER
+            time_favorite TEXT
         )''')
         self.conn.commit()
         
@@ -353,6 +382,20 @@ class LiteratureFavoriteDatabase:
     def get_literature_favorite(self, literature_favorite_id):
         self.cursor.execute("SELECT * FROM literature_favorites WHERE id=?", (literature_favorite_id,))
         return self.cursor.fetchone()
+    
+    def get_all_favorite(self):
+        self.cursor.execute("SELECT * FROM literature_favorites")
+        favorites = self.cursor.fetchall()
+        favorite_list = []
+        for favorite in favorites:
+            favorite_info = {
+                'id': favorite[0],
+                'user': favorite[1],
+                'link': favorite[2],
+                'time': favorite[3]
+            }
+            favorite_list.append(favorite_info)
+        return favorite_list
 
 class LiteratureBrowseDatabase:
     def __init__(self, db_file):
@@ -362,7 +405,7 @@ class LiteratureBrowseDatabase:
             id INTEGER PRIMARY KEY,
             user TEXT,
             link TEXT,
-            time_browse INTEGER
+            time_browse TEXT
         )''')
         self.conn.commit()
         
@@ -378,4 +421,18 @@ class LiteratureBrowseDatabase:
     def get_literature_browse(self, literature_browse_id):
         self.cursor.execute("SELECT * FROM literature_browses WHERE id=?", (literature_browse_id,))
         return self.cursor.fetchone()
+    
+    def get_all_history(self):
+        self.cursor.execute("SELECT * FROM literature_browses")
+        historys = self.cursor.fetchall()
+        history_list = []
+        for history in historys:
+            history_info = {
+                'id': history[0],
+                'user': history[1],
+                'link': history[2],
+                'time': history[3]
+            }
+            history_list.append(history_info)
+        return history_list
 
