@@ -355,7 +355,7 @@ class Reader:
                     summary_prompt_token = offset + 1000 + 150
                     chat_summary_text = self.chat_summary(text=text, summary_prompt_token=summary_prompt_token)
 
-            htmls.append('## Paper:' + str(paper_index + 1))
+            htmls.append('## 文献总结')
             htmls.append('\n\n\n')
             htmls.append(chat_summary_text)
 
