@@ -15,7 +15,7 @@ table {
 
 /* Style table headers (th) */
 table th {
-    background-color: #4CAF50;
+    background-color: #4285f4;
     color: white;
     text-align: center;
     padding: 10px;
@@ -40,7 +40,7 @@ form {
 
 /* Style buttons and select box (same as previous example) */
 button {
-    background-color: #4CAF50;
+    background-color: #4285f4;
     color: white;
     border: none;
     padding: 8px 12px;

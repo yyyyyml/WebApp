@@ -2,10 +2,11 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_manage.css') }}">
-    <title>平台状态监测</title>
+    <title>状态监测</title>
 </head>
 <body>
-    <h1>平台状态监测</h1>
+    <h1>状态监测</h1>
+    <a href="{{ url_for('manage_ctrl.manage') }}">回到首页</a>
     <table>
         <tr>
             <th>指标</th>
