@@ -6,6 +6,7 @@
 </head>
 <body>
     <a href="{{ url_for('index_ctrl.index') }}">回到首页</a>
+    <a href="{{ url_for('auth_ctrl.login') }}">退出登录</a>
     <div class="container">
         <div class="pdf-panel">
             <iframe src="{{ url_for('summary_ctrl.pdf', filename=paper_filename) }}" style="width:100%; height:100%;" frameborder="0">
@@ -13,10 +14,35 @@
             </iframe>
         </div>
         <div class="right-panel">
-            <div class="markdown-content">
-                {{ summary_content | safe }}
+            <div id="content-container">
+                <div class="markdown-content">
+                    <div id="summary-content">{{ summary_content | safe }}</div>
+                </div>
             </div>
         </div>
     </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var summary_filename = decodeURIComponent("{{ summary_filename }}");
+        function pollSummary() {
+            // 发送一个Ajax请求到后端，请求是否生成完毕
+            if (summary_filename) {
+                $.get('/check_summary?summary_filename=' + summary_filename, function(data) {
+                    if (data.generated) {
+                        // 如果生成完毕，更新页面内容
+                        $("#summary-content").html(data.summary_content);
+                    } else {
+                        // 如果未生成完毕，继续轮询
+                        setTimeout(pollSummary, 5000);
+                    }
+                });
+            }
+            
+        }
+        
+        // 初始化轮询
+        pollSummary();
+    </script>
 </body>
 </html>

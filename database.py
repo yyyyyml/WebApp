@@ -298,9 +298,19 @@ class WebFavoriteDatabase:
         self.cursor.execute("DELETE FROM web_favorites WHERE id=?", (web_favorite_id,))
         self.conn.commit()
     
-    def get_web_favorite(self, web_favorite_id):
-        self.cursor.execute("SELECT * FROM web_favorites WHERE id=?", (web_favorite_id,))
-        return self.cursor.fetchone()
+    def get_web_favorite(self, web_favorite_user):
+        self.cursor.execute("SELECT * FROM web_favorites WHERE user=?", (web_favorite_user,))
+        favorites = self.cursor.fetchall()
+        favorite_list = []
+        for favorite in favorites:
+            favorite_info = {
+                'id': favorite[0],
+                'user': favorite[1],
+                'link': favorite[2],
+                'time': favorite[3]
+            }
+            favorite_list.append(favorite_info)
+        return favorite_list
     
     def get_all_favorite(self):
         self.cursor.execute("SELECT * FROM web_favorites")
@@ -339,9 +349,19 @@ class WebBrowseDatabase:
         self.cursor.execute("DELETE FROM web_browses WHERE id=?", (web_browse_id,))
         self.conn.commit()
 
-    def get_web_browse(self, web_browse_id):
-        self.cursor.execute("SELECT * FROM web_browses WHERE id=?", (web_browse_id,))
-        return self.cursor.fetchone()
+    def get_web_browse(self, web_browse_user):
+        self.cursor.execute("SELECT * FROM web_browses WHERE user=?", (web_browse_user,))
+        historys = self.cursor.fetchall()
+        history_list = []
+        for history in historys:
+            history_info = {
+                'id': history[0],
+                'user': history[1],
+                'link': history[2],
+                'time': history[3]
+            }
+            history_list.append(history_info)
+        return history_list
     
     def get_all_history(self):
         self.cursor.execute("SELECT * FROM web_browses")
@@ -379,9 +399,19 @@ class LiteratureFavoriteDatabase:
         self.cursor.execute("DELETE FROM literature_favorites WHERE id=?", (literature_favorite_id,))
         self.conn.commit()
     
-    def get_literature_favorite(self, literature_favorite_id):
-        self.cursor.execute("SELECT * FROM literature_favorites WHERE id=?", (literature_favorite_id,))
-        return self.cursor.fetchone()
+    def get_literature_favorite(self, literature_favorite_user):
+        self.cursor.execute("SELECT * FROM literature_favorites WHERE user=?", (literature_favorite_user,))
+        favorites = self.cursor.fetchall()
+        favorite_list = []
+        for favorite in favorites:
+            favorite_info = {
+                'id': favorite[0],
+                'user': favorite[1],
+                'link': favorite[2],
+                'time': favorite[3]
+            }
+            favorite_list.append(favorite_info)
+        return favorite_list
     
     def get_all_favorite(self):
         self.cursor.execute("SELECT * FROM literature_favorites")
@@ -418,9 +448,19 @@ class LiteratureBrowseDatabase:
         self.cursor.execute("DELETE FROM literature_browses WHERE id=?", (literature_browse_id,))
         self.conn.commit()
     
-    def get_literature_browse(self, literature_browse_id):
-        self.cursor.execute("SELECT * FROM literature_browses WHERE id=?", (literature_browse_id,))
-        return self.cursor.fetchone()
+    def get_literature_browse(self, literature_browse_user):
+        self.cursor.execute("SELECT * FROM literature_browses WHERE user=?", (literature_browse_user,))
+        historys = self.cursor.fetchall()
+        history_list = []
+        for history in historys:
+            history_info = {
+                'id': history[0],
+                'user': history[1],
+                'link': history[2],
+                'time': history[3]
+            }
+            history_list.append(history_info)
+        return history_list
     
     def get_all_history(self):
         self.cursor.execute("SELECT * FROM literature_browses")

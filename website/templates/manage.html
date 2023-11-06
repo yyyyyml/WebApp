@@ -5,6 +5,7 @@
 </head>
 <body>
     <h1>管理员页面</h1>
+    <a href="{{ url_for('auth_ctrl.login') }}">退出登录</a>
     <ul>
         <li><a href="{{ url_for('manage_ctrl.manage_user') }}">用户管理</a></li>
         <li><a href="{{ url_for('manage_ctrl.manage_status') }}">平台检测</a></li>

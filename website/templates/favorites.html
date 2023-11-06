@@ -4,48 +4,55 @@
 
 <head>
     <title>My favorite</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_favorites.css') }}">
 </head>
 
 <body>
     <h1>Web favorite</h1>
     <a href="{{ url_for('index_ctrl.index') }}">回到首页</a>
+    <a href="{{ url_for('auth_ctrl.login') }}">退出登录</a>
     <table>
-        <tr>
-            <th>用户</th>
-            <th>链接</th>
-            <th>时间</th>
-            <th>操作</th>
-        </tr>
-        {% for favorite in web %}
-        <tr>
-            <td>{{ favorite.user }}</td>
-            <td>{{ favorite.link }}</td>
-            <td>{{ favorite.time}}</td>
-            <td>
-                <a href="/del_web_favor?id={{favorite.id}}">删除</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-    <h1>literature favorite</h1>
-    <table>
-        <tr>
-            <th>用户</th>
-            <th>链接</th>
-            <th>时间</th>
-            <th>操作</th>
-        </tr>
-        {% for favorite in lit %}
-        <tr>
-            <td>{{ favorite.user }}</td>
-            <td>{{ favorite.link }}</td>
-            <td>{{ favorite.time}}</td>
-            <td>
-                <a href="/del_lit_favor?id={{favorite.id}}">删除</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+    <tr>
+        <th>链接</th>
+        <th>时间</th>
+        <th>操作</th>
+    </tr>
+    {% for favorite in web %}
+    <tr>
+        <td>
+            <a
+                href="{{ url_for('result_ctrl.browse', url = favorite.link, search_type = 'web', username = username) }}">{{
+                favorite.link }}</a>
+        </td>
+        <td>{{ favorite.time}}</td>
+        <td>
+            <a href="/del_web_favor?id={{favorite.id}}&username={{username}}">删除</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<h1>literature favorite</h1>
+<table>
+    <tr>
+        <th>链接</th>
+        <th>时间</th>
+        <th>操作</th>
+    </tr>
+    {% for favorite in lit %}
+    <tr>
+        <td>
+            <a
+                href="{{ url_for('result_ctrl.browse', url = favorite.link, search_type = 'literature', username = username) }}">{{
+                favorite.link }}</a>
+        </td>
+        <td>{{ favorite.time}}</td>
+        <td>
+            <a href="/del_lit_favor?id={{favorite.id}}&username={{username}}">删除</a>
+            <a href="{{url_for('summary_ctrl.summary', url = favorite.link)}}">总结</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 </body>
 
 </html>

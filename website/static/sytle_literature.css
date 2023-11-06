@@ -1,0 +1,95 @@
+/* style.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: #0078d4;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: #0078d4;
+}
+
+form {
+    text-align: center;
+    padding: 10px;
+}
+
+input[type="text"] {
+    width: 60%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+select {
+    width: 20%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+input[type="submit"] {
+    width: 10%;
+    padding: 10px;
+    background-color: #0078d4;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+dl {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+dl a {
+    color: #0078d4;
+}
+
+dd {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+h2 {
+    color: #0078d4;
+    font-size: 18px;
+}
+
+/* 鼠标悬停效果 */
+a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+/* 链接样式 */
+a:link {
+    text-decoration: none;
+    color: #0078d4;
+}
+
+/* 已访问过的链接样式 */
+a:visited {
+    text-decoration: none;
+    color: #0056b3;
+}

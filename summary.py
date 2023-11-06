@@ -304,15 +304,6 @@ class Reader:
         self.chat_api_list = [api.strip() for api in self.chat_api_list if len(api) > 20]
         self.chatgpt_model = self.config.get('OpenAI', 'CHATGPT_MODEL')
 
-        # 如果已经设置了OpenAI key, 则不使用Azure Interface
-        if not self.chat_api_list:
-            self.chat_api_list.append(self.config.get('AzureOPenAI', 'OPENAI_API_KEYS'))
-            self.chatgpt_model = self.config.get('AzureOPenAI', 'CHATGPT_MODEL')
-
-            openai.api_base = self.config.get('AzureOPenAI', 'OPENAI_API_BASE')
-            openai.api_type = 'azure'
-            openai.api_version = self.config.get('AzureOPenAI', 'OPENAI_API_VERSION')
-
         self.cur_api = 0
         self.file_format = args.file_format
         if args.save_image:
@@ -322,13 +313,7 @@ class Reader:
         self.max_token_num = 4096
         self.encoding = tiktoken.get_encoding("gpt2")
 
-    def validateTitle(self, title):
-        # 将论文的乱七八糟的路径格式修正
-        rstr = r"[\/\\\:\*\?\"\<\>\|]"  # '/ \ : * ? " < > |'
-        new_title = re.sub(rstr, "_", title)  # 替换为下划线
-        return new_title
-
-    def summary_with_chat(self, paper_list):
+    def summary_with_chat(self, paper_list, args):
         htmls = []
         for paper_index, paper in enumerate(paper_list):
             # 第一步先用title，abs，和introduction进行总结。
@@ -432,16 +417,15 @@ class Reader:
             htmls.append("\n" * 4)
 
             # # 整合成一个文件，打包保存下来。
-            date_str = str(datetime.datetime.now())[:13].replace(' ', '-')
             export_path = os.path.join(self.root_path, 'summary')
             if not os.path.exists(export_path):
                 os.makedirs(export_path)
             mode = 'w' if paper_index == 0 else 'a'
-            file_name = date_str + '-' + self.validateTitle(paper.title[:80]) + "." + self.file_format
+            file_name = args.summary_filename
             file_path = os.path.join(export_path, file_name)
             self.export_to_markdown("\n".join(htmls), file_name=file_path, mode=mode)
 
-            # file_name = os.path.join(export_path, date_str+'-'+self.validateTitle(paper.title)+".md")
+            # file_name = os.path.join(export_path, date_str+'-'+validateTitle(paper.title)+".md")
             # self.export_to_markdown("\n".join(htmls), file_name=file_name, mode=mode)
             htmls = []
             
@@ -470,27 +454,22 @@ class Reader:
                     - (1):What is the significance of this piece of work?
                     - (2):Summarize the strengths and weaknesses of this article in three dimensions: innovation point, performance, and workload.                   
                     .......
-                 Follow the format of the output later: 
+                 务必使用中文回答（专有名词需要用英文标注)，语句尽量简洁且学术，不要和之前的<summary>内容重复，数值使用原文数字, 务必严格按照下面的格式输出，将对应内容补充到xxx中，按照\n换行
+                 ### 详细总结
                  8. Conclusion: \n\n
-                    - (1):xxx;\n                     
-                    - (2):Innovation point: xxx; Performance: xxx; Workload: xxx;\n                      
-                 
-                 Be sure to use {} answers (proper nouns need to be marked in English), statements as concise and academic as possible, do not repeat the content of the previous <summary>, the value of the use of the original numbers, be sure to strictly follow the format, the corresponding content output to xxx, in accordance with \n line feed, ....... means fill in according to the actual requirements, if not, you can not write.                 
-                 """.format(self.language, self.language)},
+                    - (1):重要性：xxx\n                     
+                    - (2):创新点: xxx\n
+                    - (3):性能: xxx\n
+                    - (4):工作量: xxx\n                        
+                                  
+                 """.format(self.language)},
         ]
 
-        if openai.api_type == 'azure':
-            response = openai.ChatCompletion.create(
-                engine=self.chatgpt_model,
-                # prompt需要用英语替换，少占用token。
-                messages=messages,
-            )
-        else:
-            response = openai.ChatCompletion.create(
-                model=self.chatgpt_model,
-                # prompt需要用英语替换，少占用token。
-                messages=messages,
-            )
+        response = openai.ChatCompletion.create(
+            model=self.chatgpt_model,
+            # prompt需要用英语替换，少占用token。
+            messages=messages,
+        )
         result = ''
         for choice in response.choices:
             result += choice.message.content
@@ -524,15 +503,15 @@ class Reader:
                     - (2):...
                     - (3):...
                     - .......
-                 Follow the format of the output that follows: 
+                 务必使用中文回答（专有名词需要用英文标注)，语句尽量简洁且学术，不要和之前的<summary>内容重复，数值使用原文数字, 务必严格按照下面的格式输出，将对应内容补充到xxx中，按照\n换行 
+                 ### 方法
                  7. Methods: \n\n
                     - (1):xxx;\n 
                     - (2):xxx;\n 
                     - (3):xxx;\n  
                     ....... \n\n     
-                 
-                 Be sure to use {} answers (proper nouns need to be marked in English), statements as concise and academic as possible, do not repeat the content of the previous <summary>, the value of the use of the original numbers, be sure to strictly follow the format, the corresponding content output to xxx, in accordance with \n line feed, ....... means fill in according to the actual requirements, if not, you can not write.                 
-                 """.format(self.language, self.language)},
+                                 
+                 """.format(self.language)},
         ]
         if openai.api_type == 'azure':
             response = openai.ChatCompletion.create(
@@ -582,34 +561,28 @@ class Reader:
                     - (2):What are the past methods? What are the problems with them? Is the approach well motivated?
                     - (3):What is the research methodology proposed in this paper?
                     - (4):On what task and what performance is achieved by the methods in this paper? Can the performance support their goals?
-                 Follow the format of the output that follows:                  
+                 务必使用中文回答（专有名词需要用英文标注)，语句尽量简洁且学术，数值使用原文数字, 务必严格按照下面的格式输出，将对应内容补充到xxx中，按照\n换行                  
+                 ### 基本信息
                  1. Title: xxx\n\n
                  2. Authors: xxx\n\n
                  3. Affiliation: xxx\n\n                 
                  4. Keywords: xxx\n\n   
-                 5. Urls: xxx or xxx , xxx \n\n      
+                 5. Urls: xxx or xxx , xxx \n\n
+                 ### 简要总结      
                  6. Summary: \n\n
                     - (1):xxx;\n 
                     - (2):xxx;\n 
                     - (3):xxx;\n  
-                    - (4):xxx.\n\n     
-                 
-                 Be sure to use {} answers (proper nouns need to be marked in English), statements as concise and academic as possible, do not have too much repetitive information, numerical values using the original numbers, be sure to strictly follow the format, the corresponding content output to xxx, in accordance with \n line feed.                 
+                    - (4):xxx.\n\n
                  """.format(self.language, self.language, self.language)},
         ]
 
-        if openai.api_type == 'azure':
-            response = openai.ChatCompletion.create(
-                engine=self.chatgpt_model,
-                # prompt需要用英语替换，少占用token。
-                messages=messages,
-            )
-        else:
-            response = openai.ChatCompletion.create(
-                model=self.chatgpt_model,
-                # prompt需要用英语替换，少占用token。
-                messages=messages,
-            )
+        
+        response = openai.ChatCompletion.create(
+            model=self.chatgpt_model,
+            # prompt需要用英语替换，少占用token。
+            messages=messages,
+        )
         result = ''
         for choice in response.choices:
             result += choice.message.content
@@ -647,15 +620,16 @@ def chat_paper_main(args):
                     paper_list.append(Paper(path=os.path.join(root, filename)))
     print("------------------paper_num: {}------------------".format(len(paper_list)))
     [print(paper_index, paper_name.path.split('\\')[-1]) for paper_index, paper_name in enumerate(paper_list)]
-    return reader1.summary_with_chat(paper_list=paper_list)
+    return reader1.summary_with_chat(paper_list=paper_list, args=args)
 
-def get_summary(path):
+def get_summary(path, summary_filename):
     parser = argparse.ArgumentParser()
     parser.add_argument("--pdf_path", type=str, default=path, help="if none, the bot will download from arxiv with query")
     parser.add_argument("--key_word", type=str, default='deep learning', help="the key word of user research fields")
     parser.add_argument("--save_image", default=False, help="save image? It takes a minute or two to save a picture! But pretty")
     parser.add_argument("--file_format", type=str, default='md', help="导出的文件格式，如果存图片的话，最好是md，如果不是的话，txt的不会乱")
-    parser.add_argument("--language", type=str, default='zh', help="The other output lauguage is English, is en")    
+    parser.add_argument("--language", type=str, default='zh', help="The other output lauguage is English, is en")   
+    parser.add_argument("--summary_filename", type=str, default=summary_filename) 
     import time
 
     start_time = time.time()
@@ -663,6 +637,27 @@ def get_summary(path):
     print("summary time:", time.time() - start_time)
     return summary_filename
 
+def get_summary_filename(path):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--pdf_path", type=str, default=path, help="if none, the bot will download from arxiv with query")
+    parser.add_argument("--key_word", type=str, default='deep learning', help="the key word of user research fields")
+    parser.add_argument("--save_image", default=False, help="save image? It takes a minute or two to save a picture! But pretty")
+    parser.add_argument("--file_format", type=str, default='md', help="导出的文件格式，如果存图片的话，最好是md，如果不是的话，txt的不会乱")
+    parser.add_argument("--language", type=str, default='zh', help="The other output lauguage is English, is en")
+    args=parser.parse_args()
+    paper = Paper(path=path)
+    date_str = str(datetime.datetime.now())[:13].replace(' ', '-')
+    summary_filename = date_str + '-' + validateTitle(paper.title[:80]) + "." + args.file_format 
+    return summary_filename
+
+
+def validateTitle(title):
+    # 将论文的乱七八糟的路径格式修正
+    rstr = r"[\/\\\:\*\?\"\<\>\|]"  # '/ \ : * ? " < > |'
+    new_title = re.sub(rstr, "_", title)  # 替换为下划线
+    return new_title
+    
+    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--pdf_path", type=str, default=r'papers/demo.pdf', help="if none, the bot will download from arxiv with query")

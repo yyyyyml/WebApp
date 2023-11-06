@@ -3,17 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <title>judge</title>
+
+    <style>
+        /* 这里粘贴你的CSS代码 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #0078d4;
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0078d4;
+            margin: 10px;
+        }
+
+        form {
+            text-align: center;
+            padding: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #0078d4;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        /* 鼠标悬停效果 */
+        a:hover {
+            text-decoration: underline;
+            color: #0056b3;
+        }
+
+        /* 链接样式 */
+        a:link {
+            text-decoration: none;
+            color: #0078d4;
+        }
+
+        /* 已访问过的链接样式 */
+        a:visited {
+            text-decoration: none;
+            color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-      <h1>用户反馈</h1>
-      <a href="{{ url_for('index_ctrl.index') }}">回到首页</a>
-        <form method="POST">
-        <input type="text" name="username" placeholder={{username}} required>
-            <br>
-            <br>
+    <h1>用户反馈</h1>
+    <a href="{{ url_for('index_ctrl.index') }}">回到首页</a>
+    <a href="{{ url_for('auth_ctrl.login') }}">退出登录</a>
+    <form method="POST">
+        <input type="text" name="username" placeholder="{{username}}" required>
+        <br>
+        <br>
         <input type="text" style="width: 400px; height: 200px;" name="context" placeholder="Say Something..." required>
-            <br>
-            <br>
+        <br>
+        <br>
         <button type="submit">Submit</button>
     </form>
 </body>

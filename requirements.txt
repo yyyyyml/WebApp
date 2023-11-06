@@ -2,7 +2,9 @@ arxiv==1.4.3
 beautifulsoup4==4.12.2
 docx==0.2.4
 Flask==3.0.0
+markdown2==2.4.10
 matplotlib==3.7.2
+mistune==3.0.2
 numpy==1.25.1
 openai==0.27.0
 pandas==2.0.3

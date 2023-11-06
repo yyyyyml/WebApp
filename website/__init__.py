@@ -7,11 +7,11 @@ from .views.relation_ctrl import relation_ctrl
 from .views.summary_ctrl import summary_ctrl
 from .views.rela_ctrl import rela_ctrl
 
-
 def create_app():
 # 创建 Flask 应用实例
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'ayuwhefgeawhfaweb123i4123dahu3iwhwq'
+    app.config['SESSION_TYPE'] = 'redis'
     
     # @app.route('/')
 

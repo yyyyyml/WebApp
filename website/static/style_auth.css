@@ -2,23 +2,29 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    text-align: center;
+    background-color: #e9ecef; /* 更柔和的背景颜色 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
 h1 {
-    color: #333;
+    color: #0078d4;
 }
 
 form {
-    max-width: 300px;
-    margin: 0 auto;
+    max-width: 400px;
+    margin: 20px auto;
     padding: 20px;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center; /* 让表单内元素居中 */
+    text-align: left; /* 让表单内元素左对齐 */
 }
 
 input[type="text"],
@@ -34,7 +40,7 @@ input[type="password"] {
 button {
     width: 100%;
     padding: 10px;
-    background-color: #0074d9;
+    background-color: #0078d4;
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -43,7 +49,7 @@ button {
 
 a {
     text-decoration: none;
-    color: #0074d9;
+    color: #0078d4;
 }
 
 ul {
@@ -62,4 +68,3 @@ li {
 .danger {
     color: #a94442;
 }
-
