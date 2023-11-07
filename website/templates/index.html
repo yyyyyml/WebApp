@@ -3,40 +3,54 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_index.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_header.css') }}">
 </head>
 
 <body>
-    <h1>首页</h1>
-    {% if user %}
-    <p>You are logged in as {{ user.username }}</p>
-    {% else %}
-    <p>You are not logged in</p>
-    {% endif %}
+
+    <header class="header">
+        <a class="logo" href="{{ url_for('index_ctrl.index') }}">Logo</a>
+
+        <!-- 用户容器包括用户图标和用户名 -->
+        <div class="user-container">
+            <div class="user-icon">
+                {{ user.username[0] }}
+            </div>
+            <div class="username">
+                {{ user.username }}
+            </div>
+
+            <!-- 用户浮窗 -->
+            <div class="user-popup">
+                <a href="{{ url_for('relation_ctrl.favorites', username=user.username) }}">我的收藏</a>
+                <a href="{{ url_for('relation_ctrl.history', username=user.username) }}">历史记录</a>
+                <a href="{{ url_for('relation_ctrl.judge', username=user.username) }}">用户反馈</a>
+                <a href="{{ url_for('auth_ctrl.logout', username=user.username) }}">退出登录</a>
+            </div>
+        </div>
+    </header>
+
     <div id="content">
+        <!-- 其余页面内容 -->
         <div id="search-box">
-            <form action="{{ url_for('result_ctrl.search_results',pn='1',username=user.username) }}" method="get">
+            <form action="{{ url_for('result_ctrl.search_results', pn='1', username=user.username) }}" method="get">
                 <input type="text" name="q" placeholder="Search...">
                 <select name="search_type">
                     <option value="web">Web</option>
                     <option value="literature">文献</option>
                 </select>
                 <input type="hidden" name="pn" value="1">
-                <input type="hidden" name="username" value={{user.username}}>
+                <input type="hidden" name="username" value="{{ user.username }}">
                 <input type="submit" value="Search">
             </form>
         </div>
         <div id="search-box">
-            <form action="{{ url_for('summary_ctrl.upload_pdf') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ url_for('summary_ctrl.upload_pdf', username=user.username) }}" method="post" enctype="multipart/form-data">
                 <input type="file" name="pdf_file">
                 <input type="submit" value="Summary">
             </form>
-        </div> 
-        
+        </div>
     </div>
-    <a href="{{ url_for('relation_ctrl.favorites', username=user.username) }}">我的收藏</a>
-    <a href="{{ url_for('relation_ctrl.history', username=user.username) }}">历史记录</a>
-    <a href="{{ url_for('relation_ctrl.judge', username=user.username) }}">反馈</a>
-    <a href="{{ url_for('auth_ctrl.logout', username=user.username) }}">退出登录</a>
 </body>
 
 </html>

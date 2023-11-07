@@ -17,6 +17,7 @@ def summary():
     url = request.args.get('url')
     pdf_path = request.args.get('pdf_path')
     pdf_filename = request.args.get('pdf_filename')
+    username = request.args.get('username')
     
     if pdf_path is None:
         # 将 URL 进行处理以作为文件名
@@ -54,7 +55,7 @@ def summary():
         
         # return redirect(url_for('summary_ctrl.loading1', paper_filename=paper_filename, summary_path=summary_path))
         print(summary_filename)
-        return render_template('summary.html', paper_filename=paper_filename, summary_content="正在总结中...", summary_filename=summary_filename)
+        return render_template('summary.html', paper_filename=paper_filename, summary_content="正在总结中...", summary_filename=summary_filename, username=username)
     else: 
         summary_path = os.path.join('summary', db_summary_filename)
         # summary_path = db_summary_filename
@@ -66,7 +67,7 @@ def summary():
 
         html_content = markdown2.markdown(summary_content)
 
-        return render_template('summary.html', paper_filename=paper_filename, summary_content=html_content)
+        return render_template('summary.html', paper_filename=paper_filename, summary_content=html_content, username=username)
 
 
 @summary_ctrl.route('/check_summary')
@@ -87,6 +88,7 @@ def check_summary():
 
 @summary_ctrl.route('/upload_pdf', methods=['POST'])
 def upload_pdf():
+    username = request.args.get('username')
     if 'pdf_file' in request.files:
         pdf_file = request.files['pdf_file']
         if pdf_file.filename != '':
@@ -96,7 +98,7 @@ def upload_pdf():
             pdf_file.save(pdf_path)
 
             # Pass the file path to the summary page
-            return redirect(url_for('summary_ctrl.summary', pdf_path=pdf_path, pdf_filename=pdf_filename))
+            return redirect(url_for('summary_ctrl.summary', pdf_path=pdf_path, pdf_filename=pdf_filename, username=username))
 
     return redirect(url_for('summary_ctrl.summary'))
 

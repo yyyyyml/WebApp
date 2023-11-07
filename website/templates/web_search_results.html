@@ -20,19 +20,36 @@
             color: #0078d4;
             margin: 20px 0;
         }
-        
-
-
     </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_header.css') }}">
 </head>
 
 <body>
-    <h1>搜索结果</h1>
-    <a href="{{ url_for('index_ctrl.index') }}">回到首页</a>
-    <a href="{{ url_for('auth_ctrl.logout', username=username) }}">退出登录</a>
+    <header class="header">
+        <a class="logo" href="{{ url_for('index_ctrl.index') }}">Logo</a>
+
+        <!-- 用户容器包括用户图标和用户名 -->
+        <div class="user-container">
+            <div class="user-icon">
+                {{ username[0] }}
+            </div>
+            <div class="username">
+                {{ username }}
+            </div>
+
+            <!-- 用户浮窗 -->
+            <div class="user-popup">
+                <a href="{{ url_for('relation_ctrl.favorites', username=username) }}">我的收藏</a>
+                <a href="{{ url_for('relation_ctrl.history', username=username) }}">历史记录</a>
+                <a href="{{ url_for('relation_ctrl.judge', username=username) }}">用户反馈</a>
+                <a href="{{ url_for('auth_ctrl.logout', username=username) }}">退出登录</a>
+            </div>
+        </div>
+    </header>
     <form action="{{ url_for('result_ctrl.search_results') }}" method="get">
         <input type="text" name="q" placeholder="Search...">
         <input type="hidden" name="pn" value="1">
+        <input type="hidden" name="username" value={{username}}>
         <select name="search_type">
             <option value="web">Web</option>
             <option value="literature">文献</option>
