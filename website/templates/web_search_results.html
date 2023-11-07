@@ -12,6 +12,7 @@
     <a href="{{ url_for('auth_ctrl.login') }}">退出登录</a>
     <form action="{{ url_for('result_ctrl.search_results') }}" method="get">
         <input type="text" name="q" placeholder="Search...">
+        <input type="hidden" name="pn" value="1">
         <select name="search_type">
             <option value="web">Web</option>
             <option value="literature">文献</option>
@@ -21,14 +22,14 @@
 
     <dl>
         {% for key,value in dic.items() %}
-        <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}'>{{value["title"]}}</a>
+        <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
         &nbsp
-        <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}'>赞</a>
+        <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
         &nbsp
-        <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}'>踩</a>
+        <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
         &nbsp
         <a
-            href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}'>收藏</a>
+            href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
         <dd>{{value["des"]}}</dd>
         <dd>{{value["origin"],value["time"]}}</dd>
         <br>
@@ -42,10 +43,56 @@
         {% endfor %}
     </ul>
 
-    <ul>
-        <h2>点赞数最多的结果</h2>
-        <a href='{{maxlike_url}}'> {{maxlike_title}}</a>
-    </ul>
+        <h2>点赞数前三的结果</h2>
+        <dl>
+        {% for key,value in dlike.items() %}
+        <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
+        &nbsp
+        <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
+        &nbsp
+        <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
+        &nbsp
+        <a
+            href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
+        <dd>{{value["des"]}}</dd>
+        <dd>{{value["origin"],value["time"]}}</dd>
+        <br>
+        {% endfor %}
+    </dl>
+
+        <h2>收藏数前三的结果</h2>
+        <dl>
+        {% for key,value in dfav.items() %}
+        <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
+        &nbsp
+        <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
+        &nbsp
+        <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
+        &nbsp
+        <a
+            href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
+        <dd>{{value["des"]}}</dd>
+        <dd>{{value["origin"],value["time"]}}</dd>
+        <br>
+        {% endfor %}
+    </dl>
+
+        <h2>浏览数前三的结果</h2>
+        <dl>
+        {% for key,value in dbr.items() %}
+        <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
+        &nbsp
+        <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
+        &nbsp
+        <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
+        &nbsp
+        <a
+            href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
+        <dd>{{value["des"]}}</dd>
+        <dd>{{value["origin"],value["time"]}}</dd>
+        <br>
+        {% endfor %}
+    </dl>
 
     <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn+1)) }}">下一页</a>
     <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn-1)) }}">上一页</a>
