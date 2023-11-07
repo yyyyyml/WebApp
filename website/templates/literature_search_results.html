@@ -107,7 +107,7 @@ a:visited {
 <body>
     <h1>文献搜索结果</h1>
     <a href="{{ url_for('index_ctrl.index') }}">回到首页</a>
-    <a href="{{ url_for('auth_ctrl.login') }}">退出登录</a>
+    <a href="{{ url_for('auth_ctrl.logout', username=username) }}">退出登录</a>
     <form action="{{ url_for('result_ctrl.search_results') }}" method="get">
         <input type="text" name="q" placeholder="Search...">
         <input type="hidden" name="pn" value="1">

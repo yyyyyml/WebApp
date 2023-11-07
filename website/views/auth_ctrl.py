@@ -14,7 +14,10 @@ def login():
 
         if user and user['password'] == password:
             session['user'] = username
+            
             if user['permission'] == 'user':
+                session['users'] = session.get('users', [])  # 初始化一个空的用户列表
+                session['users'].append(username)  # 将用户添加到列表
                 return redirect(url_for('index_ctrl.index'))
             else:
                 return redirect(url_for('manage_ctrl.manage'))
@@ -51,3 +54,14 @@ def profile():
         user = user_db.get_user(username)
         return render_template('profile.html', user=user)
     return 'You are not logged in'
+
+# 清除用户登录状态
+@auth_ctrl.route('/logout')
+def logout():
+    username = request.args.get('username')
+    if 'users' in session:
+        session['users'].remove(username)  # 从用户列表中移除用户
+        session.modified = True  # 标记 session 为已修改
+        print(session['users'])
+        
+        return redirect(url_for('auth_ctrl.login'))

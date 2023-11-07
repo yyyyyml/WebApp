@@ -450,13 +450,13 @@ class Reader:
              "content": "This is the <summary> and <conclusion> part of an English literature, where <summary> you have already summarized, but <conclusion> part, I need your help to summarize the following questions:" + clip_text},
             # 背景知识，可以参考OpenReview的审稿流程
             {"role": "user", "content": """                 
-                 8. Make the following summary.Be sure to use {} answers (proper nouns need to be marked in English).
+                 Make the following summary.Be sure to use {} answers (proper nouns need to be marked in English).
                     - (1):What is the significance of this piece of work?
                     - (2):Summarize the strengths and weaknesses of this article in three dimensions: innovation point, performance, and workload.                   
                     .......
                  务必使用中文回答（专有名词需要用英文标注)，语句尽量简洁且学术，不要和之前的<summary>内容重复，数值使用原文数字, 务必严格按照下面的格式输出，将对应内容补充到xxx中，按照\n换行
-                 ### 详细总结
-                 8. Conclusion: \n\n
+                ### 详细总结
+                 Conclusion: \n\n
                     - (1):重要性：xxx\n                     
                     - (2):创新点: xxx\n
                     - (3):性能: xxx\n
@@ -498,14 +498,14 @@ class Reader:
              "content": "This is the <summary> and <Method> part of an English document, where <summary> you have summarized, but the <Methods> part, I need your help to read and summarize the following questions." + clip_text},
             # 背景知识
             {"role": "user", "content": """                 
-                 7. Describe in detail the methodological idea of this article. Be sure to use {} answers (proper nouns need to be marked in English). For example, its steps are.
+                 Describe in detail the methodological idea of this article. Be sure to use {} answers (proper nouns need to be marked in English). For example, its steps are.
                     - (1):...
                     - (2):...
                     - (3):...
                     - .......
                  务必使用中文回答（专有名词需要用英文标注)，语句尽量简洁且学术，不要和之前的<summary>内容重复，数值使用原文数字, 务必严格按照下面的格式输出，将对应内容补充到xxx中，按照\n换行 
-                 ### 方法
-                 7. Methods: \n\n
+                ### 方法
+                 Methods: \n\n
                     - (1):xxx;\n 
                     - (2):xxx;\n 
                     - (3):xxx;\n  
@@ -561,15 +561,16 @@ class Reader:
                     - (2):What are the past methods? What are the problems with them? Is the approach well motivated?
                     - (3):What is the research methodology proposed in this paper?
                     - (4):On what task and what performance is achieved by the methods in this paper? Can the performance support their goals?
-                 务必使用中文回答（专有名词需要用英文标注)，语句尽量简洁且学术，数值使用原文数字, 务必严格按照下面的格式输出，将对应内容补充到xxx中，按照\n换行                  
-                 ### 基本信息
-                 1. Title: xxx\n\n
-                 2. Authors: xxx\n\n
-                 3. Affiliation: xxx\n\n                 
-                 4. Keywords: xxx\n\n   
-                 5. Urls: xxx or xxx , xxx \n\n
+                 务必使用中文回答（专有名词需要用英文标注)，语句尽量简洁且学术，数值使用原文数字, 务必严格按照下面的格式输出，将对应内容补充到xxx中，按照\n换行
+                                   
+                ### 基本信息
+                 Title: xxx\n\n
+                 Authors: xxx\n\n
+                 Affiliation: xxx\n\n                 
+                 Keywords: xxx\n\n   
+                 Urls: xxx or xxx , xxx \n\n
                  ### 简要总结      
-                 6. Summary: \n\n
+                 Summary: \n\n
                     - (1):xxx;\n 
                     - (2):xxx;\n 
                     - (3):xxx;\n  
@@ -633,7 +634,7 @@ def get_summary(path, summary_filename):
     import time
 
     start_time = time.time()
-    summary_filename = chat_paper_main(args=parser.parse_args())
+    chat_paper_main(args=parser.parse_args())
     print("summary time:", time.time() - start_time)
     return summary_filename
 
