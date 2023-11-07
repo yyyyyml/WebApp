@@ -18,11 +18,13 @@
     margin-right: 10px; /* 用于添加间距 */
     margin-top: 10px; /* 添加上边距 */
     margin-bottom: 10px; /* 添加下边距 */
+    font-size: 20px;
 }
 
 .username {
     font-weight: bold;
     color: #000;
+    font-size: 20px;
 }
 
 /* 用户浮窗样式 */
