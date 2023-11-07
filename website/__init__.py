@@ -5,7 +5,6 @@ from .views.manage_ctrl import manage_ctrl
 from .views.result_ctrl import result_ctrl
 from .views.relation_ctrl import relation_ctrl
 from .views.summary_ctrl import summary_ctrl
-from .views.rela_ctrl import rela_ctrl
 
 def create_app():
 # 创建 Flask 应用实例
@@ -22,7 +21,6 @@ def create_app():
     app.register_blueprint(result_ctrl)
     app.register_blueprint(relation_ctrl)
     app.register_blueprint(summary_ctrl)
-    app.register_blueprint(rela_ctrl)
     
     return app
 
