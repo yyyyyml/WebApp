@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>judge</title>
-
+    <title>用户反馈</title>
     <style>
-        /* 这里粘贴你的CSS代码 */
+        /* Reset some default styles */
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -13,28 +12,49 @@
             padding: 0;
         }
 
+        /* Style the header */
         h1 {
             color: #0078d4;
             text-align: center;
+            margin: 20px 0;
         }
 
+        /* Style the links */
         a {
             text-decoration: none;
             color: #0078d4;
             margin: 10px;
         }
 
-        form {
-            text-align: center;
-            padding: 10px;
+        a:hover {
+            text-decoration: underline;
+            color: #0056b3;
         }
 
+        /* Center the form and style it */
+        form {
+            text-align: center;
+            margin: 0 auto;
+            max-width: 400px; /* Limit the form width */
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style form elements */
         input[type="text"] {
-            width: 100%;
+            width: 95%;
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 3px;
+        }
+
+        input[type="text"][name="context"] {
+            width: 95%;
+            height: 100px;
         }
 
         button[type="submit"] {
@@ -47,22 +67,9 @@
             cursor: pointer;
         }
 
-        /* 鼠标悬停效果 */
-        a:hover {
-            text-decoration: underline;
-            color: #0056b3;
-        }
-
-        /* 链接样式 */
-        a:link {
-            text-decoration: none;
-            color: #0078d4;
-        }
-
-        /* 已访问过的链接样式 */
-        a:visited {
-            text-decoration: none;
-            color: #0056b3;
+        /* Apply padding to the form elements */
+        form input, form button {
+            padding: 10px;
         }
     </style>
 </head>
@@ -72,11 +79,7 @@
     <a href="{{ url_for('auth_ctrl.logout', username=username) }}">退出登录</a>
     <form method="POST">
         <input type="text" name="username" placeholder="{{username}}" required>
-        <br>
-        <br>
-        <input type="text" style="width: 400px; height: 200px;" name="context" placeholder="Say Something..." required>
-        <br>
-        <br>
+        <input type="text" name="context" placeholder="Say Something..." required>
         <button type="submit">Submit</button>
     </form>
 </body>

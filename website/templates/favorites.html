@@ -4,7 +4,65 @@
 
 <head>
     <title>My favorite</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_favorites.css') }}">
+    <style>
+        /* 设置整体页面背景色和文字颜色 */
+body {
+    background-color: #f5f5f5; /* 柔和的背景色 */
+    color: #333;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* 设定标题样式 */
+h1 {
+    text-align: center;
+    color: #0078d4;
+    padding: 20px; /* 增加标题的内边距 */
+}
+
+/* 设定表格样式 */
+table {
+    width: 80%;
+    border-collapse: collapse;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 设定表头样式 */
+th {
+    background-color: #0078d4;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+}
+
+/* 设定表格行交替背景色 */
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* 更柔和的交替背景色 */
+}
+
+/* 设定表格数据单元格样式 */
+td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+/* 设定链接样式 */
+a {
+    text-decoration: none;
+    color: #0078d4;
+}
+
+/* 设定链接的鼠标悬停样式 */
+a:hover {
+    text-decoration: underline;
+}
+
+    </style>
 </head>
 
 <body>

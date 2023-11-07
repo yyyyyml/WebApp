@@ -2,14 +2,75 @@
 <html>
 <head>
     <title>管理员页面</title>
+    <style>
+/* style.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2; /* 背景颜色 */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+h1 {
+    color: #0078d4; /* 标题颜色 */
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: #0078d4; /* 链接颜色 */
+    margin: 10px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    text-align: center;
+}
+
+/* 调整链接间的垂直距离 */
+li a {
+    display: block;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #0078d4;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+li a:hover {
+    background-color: #0056b3; /* 链接悬停时的背景颜色 */
+}
+
+
+    </style>
+</head>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>管理员页面</title>
+    <link rel="stylesheet" type="text/css" href="style_manage.css">
 </head>
 <body>
     <h1>管理员页面</h1>
-    <a href="{{ url_for('auth_ctrl.login') }}">退出登录</a>
-    <ul>
+    <a class="logout-link" href="{{ url_for('auth_ctrl.login') }}">退出登录</a>
+    <ul class="menu-list">
         <li><a href="{{ url_for('manage_ctrl.manage_user') }}">用户管理</a></li>
         <li><a href="{{ url_for('manage_ctrl.manage_status') }}">平台监测</a></li>
-        <li><a href="{{ url_for('manage_ctrl.manage_feedback') }}">用户反馈</a></li>
+        <li><a href="{{ url_for('manage_ctrl.manage_feedback') }}">查看反馈</a></li>
     </ul>
 </body>
 </html>
+

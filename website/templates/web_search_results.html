@@ -4,6 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Search</title>
+    <style>
+        /* 设置整体页面背景色和文字颜色 */
+        body {
+            background-color: #f0f0f0;
+            color: #333;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 设定标题样式 */
+        h1 {
+            text-align: center;
+            color: #0078d4;
+            margin: 20px 0;
+        }
+        
+
+
+    </style>
 </head>
 
 <body>
@@ -23,7 +43,7 @@
     <dl>
         {% for key,value in dic.items() %}
         <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
-        &nbsp
+&nbsp
         <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
         &nbsp
         <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
@@ -43,11 +63,11 @@
         {% endfor %}
     </ul>
 
-        <h2>点赞数前三的结果</h2>
-        <dl>
+    <h2>点赞数前三的结果</h2>
+    <dl>
         {% for key,value in dlike.items() %}
         <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
-        &nbsp
+&nbsp
         <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
         &nbsp
         <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
@@ -60,11 +80,11 @@
         {% endfor %}
     </dl>
 
-        <h2>收藏数前三的结果</h2>
-        <dl>
+    <h2>收藏数前三的结果</h2>
+    <dl>
         {% for key,value in dfav.items() %}
         <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
-        &nbsp
+&nbsp
         <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
         &nbsp
         <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
@@ -77,11 +97,11 @@
         {% endfor %}
     </dl>
 
-        <h2>浏览数前三的结果</h2>
-        <dl>
+    <h2>浏览数前三的结果</h2>
+    <dl>
         {% for key,value in dbr.items() %}
         <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
-        &nbsp
+&nbsp
         <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
         &nbsp
         <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
