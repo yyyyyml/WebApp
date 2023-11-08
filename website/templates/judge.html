@@ -76,7 +76,7 @@
 </head>
 <body>
     <header class="header">
-        <a class="logo" href="{{ url_for('index_ctrl.index') }}">Logo</a>
+        <a class="logo" href="{{ url_for('index_ctrl.index') }}">搜索分析平台</a>
 
         <!-- 用户容器包括用户图标和用户名 -->
         <div class="user-container">
@@ -96,9 +96,6 @@
             </div>
         </div>
     </header>
-    <h1>用户反馈</h1>
-    <a href="{{ url_for('index_ctrl.index') }}">回到首页</a>
-    <a href="{{ url_for('auth_ctrl.logout', username=username) }}">退出登录</a>
     <form method="POST">
         <input type="text" name="username" placeholder="{{username}}" required>
         <input type="text" name="context" placeholder="Say Something..." required>

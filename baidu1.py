@@ -90,5 +90,7 @@ def baidu_search(query, pn):
     # pprint(search_results)
     return search_results
 
-search_results = baidu_search("iou", 2)
-pprint(search_results)
+
+if __name__ == '__main__':
+    search_results = baidu_search("算法", 2)
+    pprint(search_results)

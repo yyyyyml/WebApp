@@ -19,7 +19,10 @@
     margin-top: 10px; /* 添加上边距 */
     margin-bottom: 10px; /* 添加下边距 */
     font-size: 20px;
+    text-align: center; /* 水平居中文本 */
+    line-height: 40px; /* 垂直居中文本 */
 }
+
 
 .username {
     font-weight: bold;
@@ -83,9 +86,15 @@
 }
 
 .logo {
-    font-size: 25px;
-    font-weight: bold;
+    font-size: 30px;
+    font-family: "阿里妈妈刀隶体 Regular", sans-serif;
     text-decoration: none;
     color: #000;
     margin-left: 30px;
+}
+
+@font-face {
+    font-family: "阿里妈妈刀隶体 Regular";font-weight: 400;src: url("//at.alicdn.com/wf/webfont/IHfE6eV71tt3/uZIrUgP5ivOp.woff2") format("woff2"),
+    url("//at.alicdn.com/wf/webfont/IHfE6eV71tt3/LurRHt7a9Hzu.woff") format("woff");
+    font-display: swap;
 }
