@@ -8,8 +8,10 @@ WEB_ITEMS_DB = os.path.join(BASE_DIR, 'databases/web_items.sqlite')
 LITERATURE_ITEMS_DB = os.path.join(BASE_DIR, 'databases/literature_items.sqlite')
 MESSAGES_DB = os.path.join(BASE_DIR, 'databases/messages.sqlite')
 WEB_FAVORITES_DB = os.path.join(BASE_DIR, 'databases/web_favorites.sqlite')
+WEB_LIKES_DB = os.path.join(BASE_DIR, 'databases/web_likes.sqlite')
 WEB_BROWSES_DB = os.path.join(BASE_DIR, 'databases/web_browses.sqlite')
 LITERATURE_FAVORITES_DB = os.path.join(BASE_DIR, 'databases/literature_favorites.sqlite')
+LITERATURE_LIKES_DB = os.path.join(BASE_DIR, 'databases/literature_likes.sqlite')
 LITERATURE_BROWSES_DB = os.path.join(BASE_DIR, 'databases/literature_browses.sqlite')
 
 def get_user_database():
@@ -24,11 +26,17 @@ def get_literature_item_database():
 def get_message_database():
     return MessageDatabase(MESSAGES_DB)
 
+def get_web_like_database():
+    return WebLikeDatabase(WEB_LIKES_DB)
+
 def get_web_favorite_database():
     return WebFavoriteDatabase(WEB_FAVORITES_DB)
 
 def get_web_browse_database():
     return WebBrowseDatabase(WEB_BROWSES_DB)
+
+def get_literature_like_database():
+    return LiteratureLikeDatabase(LITERATURE_LIKES_DB)
 
 def get_literature_favorite_database():
     return LiteratureFavoriteDatabase(LITERATURE_FAVORITES_DB)
@@ -147,6 +155,14 @@ class WebItemDatabase:
             }
         else:
             return None
+    
+    def get_web_title(self, link):
+        self.cursor.execute("SELECT * FROM web_items WHERE link=?", (link,))
+        web = self.cursor.fetchone()
+        return{
+            'title':web[2],
+            'origin':web[3]
+        }
 
 
 class LiteratureItemDatabase:
@@ -227,6 +243,15 @@ class LiteratureItemDatabase:
             return result[0]
         else:
             return None
+    
+    def get_lit_title(self, link):
+        self.cursor.execute("SELECT * FROM literature_items WHERE link=?", (link,))
+        lit = self.cursor.fetchone()
+        return {
+            'title': lit[2],
+            'author': lit[5]
+        }
+
 
 
 
@@ -276,6 +301,59 @@ class MessageDatabase:
         return message_list
 
 
+class WebLikeDatabase:
+    def __init__(self, db_file):
+        self.conn = sqlite3.connect(db_file)
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS web_likes (
+            id INTEGER PRIMARY KEY,
+            user TEXT,
+            title TEXT,
+            link TEXT,
+            time_like TEXT
+        )''')
+        self.conn.commit()
+
+    def add_web_like(self, user, title, link, time_like):
+        self.cursor.execute("INSERT INTO web_likes (user, title, link, time_like) VALUES (?, ?, ?, ?)",
+                            (user, title, link, time_like))
+        self.conn.commit()
+
+    def delete_web_like(self, web_like_id):
+        self.cursor.execute("DELETE FROM web_likes WHERE id=?", (web_like_id,))
+        self.conn.commit()
+
+    def get_web_like(self, web_like_user):
+        self.cursor.execute("SELECT * FROM web_likes WHERE user=?", (web_like_user,))
+        likes = self.cursor.fetchall()
+        like_list = []
+        for like in likes:
+            like_info = {
+                'id': like[0],
+                'user': like[1],
+                'title': like[2],
+                'link': like[3],
+                'time': like[4]
+            }
+            like_list.append(like_info)
+        return like_list
+
+    def get_all_like(self):
+        self.cursor.execute("SELECT * FROM web_likes")
+        likes = self.cursor.fetchall()
+        like_list = []
+        for like in likes:
+            like_info = {
+                'id': like[0],
+                'user': like[1],
+                'title': like[2],
+                'link': like[3],
+                'time': like[4]
+            }
+            like_list.append(like_info)
+        return like_list
+
+
 
 class WebFavoriteDatabase:
     def __init__(self, db_file):
@@ -284,14 +362,15 @@ class WebFavoriteDatabase:
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS web_favorites (
             id INTEGER PRIMARY KEY,
             user TEXT,
+            title TEXT,
             link TEXT,
             time_favorite TEXT
         )''')
         self.conn.commit()
         
-    def add_web_favorite(self, user, link, time_favorite):
-        self.cursor.execute("INSERT INTO web_favorites (user, link, time_favorite) VALUES (?, ?, ?)",
-                            (user, link, time_favorite))
+    def add_web_favorite(self, user, title, link, time_favorite):
+        self.cursor.execute("INSERT INTO web_favorites (user, title, link, time_favorite) VALUES (?, ?, ?, ?)",
+                            (user, title, link, time_favorite))
         self.conn.commit()
 
     def delete_web_favorite(self, web_favorite_id):
@@ -306,8 +385,9 @@ class WebFavoriteDatabase:
             favorite_info = {
                 'id': favorite[0],
                 'user': favorite[1],
-                'link': favorite[2],
-                'time': favorite[3]
+                'title':favorite[2],
+                'link': favorite[3],
+                'time': favorite[4]
             }
             favorite_list.append(favorite_info)
         return favorite_list
@@ -320,8 +400,9 @@ class WebFavoriteDatabase:
             favorite_info = {
                 'id': favorite[0],
                 'user': favorite[1],
-                'link': favorite[2],
-                'time': favorite[3]
+                'title':favorite[2],
+                'link': favorite[3],
+                'time': favorite[4]
             }
             favorite_list.append(favorite_info)
         return favorite_list
@@ -378,6 +459,60 @@ class WebBrowseDatabase:
         return history_list
 
 
+class LiteratureLikeDatabase:
+    def __init__(self, db_file):
+        self.conn = sqlite3.connect(db_file)
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS literature_likes (
+            id INTEGER PRIMARY KEY,
+            user TEXT,
+            title TEXT,
+            link TEXT,
+            time_like TEXT
+        )''')
+        self.conn.commit()
+
+    def add_literature_like(self, user, title, link, time_like):
+        self.cursor.execute("INSERT INTO literature_likes (user, title, link, time_like) VALUES (?, ?, ?, ?)",
+                            (user, title, link, time_like))
+        self.conn.commit()
+
+    def delete_literature_like(self, literature_like_id):
+        self.cursor.execute("DELETE FROM literature_likes WHERE id=?", (literature_like_id,))
+        self.conn.commit()
+
+    def get_literature_like(self, literature_like_user):
+        self.cursor.execute("SELECT * FROM literature_likes WHERE user=?", (literature_like_user,))
+        likes = self.cursor.fetchall()
+        like_list = []
+        for like in likes:
+            like_info = {
+                'id': like[0],
+                'user': like[1],
+                'title': like[2],
+                'link': like[3],
+                'time': like[4]
+            }
+            like_list.append(like_info)
+        return like_list
+
+    def get_all_like(self):
+        self.cursor.execute("SELECT * FROM literature_likes")
+        likes = self.cursor.fetchall()
+        like_list = []
+        for like in likes:
+            like_info = {
+                'id': like[0],
+                'user': like[1],
+                'title': like[2],
+                'link': like[3],
+                'time': like[4]
+            }
+            like_list.append(like_info)
+        return like_list
+
+
+
 class LiteratureFavoriteDatabase:
     def __init__(self, db_file):
         self.conn = sqlite3.connect(db_file)
@@ -385,14 +520,15 @@ class LiteratureFavoriteDatabase:
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS literature_favorites (
             id INTEGER PRIMARY KEY,
             user TEXT,
+            title TEXT,
             link TEXT,
             time_favorite TEXT
         )''')
         self.conn.commit()
         
-    def add_literature_favorite(self, user, link, time_favorite):
-        self.cursor.execute("INSERT INTO literature_favorites (user, link, time_favorite) VALUES (?, ?, ?)",
-                            (user, link, time_favorite))
+    def add_literature_favorite(self, user, title, link, time_favorite):
+        self.cursor.execute("INSERT INTO literature_favorites (user, title, link, time_favorite) VALUES (?, ?, ?, ?)",
+                            (user, title, link, time_favorite))
         self.conn.commit()
         
     def delete_literature_favorite(self, literature_favorite_id):
@@ -407,8 +543,9 @@ class LiteratureFavoriteDatabase:
             favorite_info = {
                 'id': favorite[0],
                 'user': favorite[1],
-                'link': favorite[2],
-                'time': favorite[3]
+                'title': favorite[2],
+                'link': favorite[3],
+                'time': favorite[4]
             }
             favorite_list.append(favorite_info)
         return favorite_list
@@ -421,8 +558,9 @@ class LiteratureFavoriteDatabase:
             favorite_info = {
                 'id': favorite[0],
                 'user': favorite[1],
-                'link': favorite[2],
-                'time': favorite[3]
+                'title': favorite[2],
+                'link': favorite[3],
+                'time': favorite[4]
             }
             favorite_list.append(favorite_info)
         return favorite_list

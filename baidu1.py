@@ -33,7 +33,7 @@ def baidu_search(query, pn):
 
     # 使用BeautifulSoup解析页面
     soup = BeautifulSoup(response.text, 'html.parser')
-    print(soup)
+    # print(soup)
 
     # 提取相关搜索词
     related_results = soup.find_all('a', class_='rs-link_2DE3Q')

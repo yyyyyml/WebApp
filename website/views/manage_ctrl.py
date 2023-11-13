@@ -13,7 +13,8 @@ manage_ctrl = Blueprint('manage_ctrl', __name__)
 
 @manage_ctrl.route('/manage')
 def manage():
-    return render_template('manage.html')
+    username = request.args.get('username')
+    return render_template('manage.html', username=username)
 
 @manage_ctrl.route('/logout_user', methods=['POST'])
 def logout_user():
@@ -41,12 +42,16 @@ def update_permission():
 @manage_ctrl.route('/manage_user')
 def manage_user():
     # 获取所有用户信息
+    username = request.args.get('username')
+    current_page = request.args.get('current_page')
     user_db = get_user_database()
     users = user_db.get_all_users()
-    return render_template('manage_user.html', users=users)
+    return render_template('manage_user.html', users=users, username=username, current_page=current_page)
 
 @manage_ctrl.route('/manage_status')
 def manage_status():
+    username = request.args.get('username')
+    current_page = request.args.get('current_page')
    # 获取平台状态信息，这里使用示例数据
     server_runtime = get_server_runtime()
     online_users = get_online_users()
@@ -55,15 +60,16 @@ def manage_status():
     memory_usage = get_memory_usage()
     available_storage = get_available_storage()
 
-    return render_template('manage_status.html', server_runtime=server_runtime, online_users=online_users, system_info=system_info, cpu_usage=cpu_usage, memory_usage=memory_usage, available_storage=available_storage)
+    return render_template('manage_status.html', username=username, current_page=current_page, server_runtime=server_runtime, online_users=online_users, system_info=system_info, cpu_usage=cpu_usage, memory_usage=memory_usage, available_storage=available_storage)
 
 @manage_ctrl.route('/manage_feedback')
 def manage_feedback():
+    username = request.args.get('username')
+    current_page = request.args.get('current_page')
     # 获取用户反馈信息
-    # 在这里获取相应的数据
     message_db = get_message_database()
     messages = message_db.get_all_messages()
-    return render_template('manage_feedback.html', messages=messages)
+    return render_template('manage_feedback.html', username=username, current_page=current_page, messages=messages)
 
 def get_system_info():
     system_info = {

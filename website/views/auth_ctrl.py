@@ -20,7 +20,7 @@ def login():
                 session['users'].append(username)  # 将用户添加到列表
                 return redirect(url_for('index_ctrl.index'))
             else:
-                return redirect(url_for('manage_ctrl.manage'))
+                return redirect(url_for('manage_ctrl.manage_status', username=username, current_page ='manage_status'))
 
         flash('Login failed. Check your username and password.', 'danger')
 
@@ -59,9 +59,11 @@ def profile():
 @auth_ctrl.route('/logout')
 def logout():
     username = request.args.get('username')
+    
     if 'users' in session:
-        session['users'].remove(username)  # 从用户列表中移除用户
-        session.modified = True  # 标记 session 为已修改
-        print(session['users'])
-        
-        return redirect(url_for('auth_ctrl.login'))
+        if username in session['users']:
+            session['users'].remove(username)  # Remove the user from the list in session
+            session.modified = True  # Mark session as modified
+            print(session['users'])
+            
+    return redirect(url_for('auth_ctrl.login'))

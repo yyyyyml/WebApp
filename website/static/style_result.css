@@ -1,0 +1,130 @@
+.result-item {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin: 10px;
+    padding: 10px;
+}
+
+.result-meta {
+    margin: 10px 0;
+}
+
+.meta-item {
+    margin: 10px;
+}
+
+.meta-details {
+    margin-left: 10px;
+    color: #777;
+}
+
+.result-snippet {
+    margin: 10px 0;
+}
+
+.pdf-link {
+    margin: 10px;
+}
+
+.summary-link {
+    margin: 10px;
+}
+
+.search-form {
+    width: 100%;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    padding: 10px;
+    width: 70%;
+    font-size: 16px;
+}
+
+.search-type {
+    border: 1px solid #ddd;
+    border-radius: 0;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.search-button {
+    background-color: #0078d4;
+    color: #fff;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+
+.results-container {
+    display: flex;
+    width: 100%;
+}
+
+.main-results {
+    width: 70%;
+    padding: 10px;
+}
+
+.side-results {
+    width: 30%;
+    padding: 10px;
+}
+
+.pagination-links {
+    align-self: center;
+    margin-top: 20px;
+}
+/* 添加样式以便隐藏/显示结果 */
+.side-results dl {
+    display: none;
+}
+
+.side-results dl.active {
+    display: block;
+}
+/* 添加样式以美化选项外观和选中状态 */
+.sort-options {
+    display: flex;
+    margin-bottom: 10px;
+    padding: 10px;
+    padding-top: 15px;
+}
+
+.sort-option {
+    cursor: pointer;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.sort-option:hover {
+    background-color: #f0f0f0;
+}
+
+/* 新增选中状态的样式 */
+.sort-option.active {
+    background-color: #0078d4;
+    color: #fff;
+}

@@ -23,9 +23,34 @@ def search_results():
     if search_type == 'web':
         result = baidu1.baidu_search(query=query, pn=pn)
         pprint(result)
-        if len(result) == 0:
+        if len(result) <=1:
             return render_template('web_error.html')
         else:
+            web_fav_db = database.get_web_favorite_database()
+            favlist1 = web_fav_db.get_web_favorite(username)
+            web_like_db = database.get_web_like_database()
+            likelist1= web_like_db.get_web_like(username)
+            likemask=[]
+            favmask=[]
+            for i in range(1,len(result)):
+                flaglike = False
+                for j in range(len(likelist1)):
+                    if result[i]['url']==likelist1[j]['link']:
+                        likemask.append(1)
+                        flaglike=True
+                        break
+                if not flaglike:
+                    likemask.append(0)
+            for i in range(1,len(result)):
+                flagfav = False
+                for j in range(len(favlist1)):
+                    if result[i]['url']==favlist1[j]['link']:
+                        favmask.append(1)
+                        flagfav=True
+                        break
+                if not flagfav:
+                    favmask.append(0)
+
             d = dict()
             dr = dict()
             web_db = database.get_web_item_database()
@@ -42,8 +67,32 @@ def search_results():
                     elif webj is None and webj1 is not None:
                         result[j], result[j + 1] = result[j + 1], result[j]
             dlike = dict()
+            likelist = []
+            lm = []
+            fm = []
             for i in range(1,4):
                 dlike[i] = result[i]
+                web = web_db.get_web(result[i]['title'])
+                if web is not None:
+                    likelist.append(web['likes'])
+                else:
+                    likelist.append(0)
+                flaglike = False
+                for j in range(len(likelist1)):
+                    if result[i]['url'] == likelist1[j]['link']:
+                        lm.append(1)
+                        flaglike = True
+                        break
+                if not flaglike:
+                    lm.append(0)
+                flagfav = False
+                for j in range(len(favlist1)):
+                    if result[i]['url'] == favlist1[j]['link']:
+                        fm.append(1)
+                        flagfav = True
+                        break
+                if not flagfav:
+                    fm.append(0)
 
 
             for i in range(2,len(result)):
@@ -55,8 +104,32 @@ def search_results():
                     elif webj is None and webj1 is not None:
                         result[j], result[j + 1] = result[j + 1], result[j]
             dfav = dict()
+            favlist = []
+            lm1=[]
+            fm1=[]
             for i in range(1,4):
                 dfav[i] = result[i]
+                web = web_db.get_web(result[i]['title'])
+                if web is not None:
+                    favlist.append(web['favorites'])
+                else:
+                    favlist.append(0)
+                flaglike = False
+                for j in range(len(likelist1)):
+                    if result[i]['url'] == likelist1[j]['link']:
+                        lm1.append(1)
+                        flaglike = True
+                        break
+                if not flaglike:
+                    lm1.append(0)
+                flagfav = False
+                for j in range(len(favlist1)):
+                    if result[i]['url'] == favlist1[j]['link']:
+                        fm1.append(1)
+                        flagfav = True
+                        break
+                if not flagfav:
+                    fm1.append(0)
 
 
             for i in range(2,len(result)):
@@ -68,17 +141,66 @@ def search_results():
                     elif webj is None and webj1 is not None:
                         result[j], result[j + 1] = result[j + 1], result[j]
             dbr = dict()
+            brlist = []
+            lm2=[]
+            fm2=[]
             for i in range(1,4):
                 dbr[i] = result[i]
+                web = web_db.get_web(result[i]['title'])
+                if web is not None:
+                    brlist.append(web['browses'])
+                else:
+                    brlist.append(0)
+                flaglike = False
+                for j in range(len(likelist1)):
+                    if result[i]['url'] == likelist1[j]['link']:
+                        lm2.append(1)
+                        flaglike = True
+                        break
+                if not flaglike:
+                    lm2.append(0)
+                flagfav = False
+                for j in range(len(favlist1)):
+                    if result[i]['url'] == favlist1[j]['link']:
+                        fm2.append(1)
+                        flagfav = True
+                        break
+                if not flagfav:
+                    fm2.append(0)
 
             return render_template('web_search_results.html', dic=d, relate=dr, query=query, search_type=search_type,
-                                   dlike=dlike,dbr=dbr,dfav=dfav,
+                                   dlike=dlike,dbr=dbr,dfav=dfav,likelist=likelist,favlist=favlist,brlist = brlist,
+                                   likemask=likemask,favmask=favmask,lm=lm,fm=fm,lm1=lm1,fm1=fm1,lm2=lm2,fm2=fm2,
                                    pn=pn, username=username)
     elif search_type == 'literature':
         result = google1.google_scholar_search(query, pn)
         if len(result) == 0:
             return render_template('web_error.html')
         else:
+            web_fav_db = database.get_literature_favorite_database()
+            favlist1 = web_fav_db.get_literature_favorite(username)
+            web_like_db = database.get_literature_like_database()
+            likelist1 = web_like_db.get_literature_like(username)
+            likemask = []
+            favmask = []
+            for i in range(0, len(result)):
+                flaglike = False
+                for j in range(len(likelist1)):
+                    if result[i]['link'] == likelist1[j]['link']:
+                        likemask.append(1)
+                        flaglike = True
+                        break
+                if not flaglike:
+                    likemask.append(0)
+            for i in range(0, len(result)):
+                flagfav = False
+                for j in range(len(favlist1)):
+                    if result[i]['link'] == favlist1[j]['link']:
+                        favmask.append(1)
+                        flagfav = True
+                        break
+                if not flagfav:
+                    favmask.append(0)
             d = dict()
             dr = dict()
             for i in range(len(result)):
@@ -93,8 +215,32 @@ def search_results():
                     elif webj is None and webj1 is not None:
                         result[j], result[j + 1] = result[j + 1], result[j]
             dlike = dict()
+            likelist = []
+            lm=[]
+            fm=[]
             for i in range(0,3):
                 dlike[i] = result[i]
+                web = lit_db.get_lit(result[i]['title'])
+                if web is not None:
+                    likelist.append(web['likes'])
+                else:
+                    likelist.append(0)
+                flaglike = False
+                for j in range(len(likelist1)):
+                    if result[i]['link'] == likelist1[j]['link']:
+                        lm.append(1)
+                        flaglike = True
+                        break
+                if not flaglike:
+                    lm.append(0)
+                flagfav = False
+                for j in range(len(favlist1)):
+                    if result[i]['link'] == favlist1[j]['link']:
+                        fm.append(1)
+                        flagfav = True
+                        break
+                if not flagfav:
+                    fm.append(0)
 
             for i in range(1,len(result)):
                 for j in range(0,len(result)-i):
@@ -105,8 +251,32 @@ def search_results():
                     elif webj is None and webj1 is not None:
                         result[j], result[j + 1] = result[j + 1], result[j]
             dfav = dict()
+            favlist = []
+            lm1=[]
+            fm1=[]
             for i in range(0,3):
                 dfav[i] = result[i]
+                web = lit_db.get_lit(result[i]['title'])
+                if web is not None:
+                    favlist.append(web['favorites'])
+                else:
+                    favlist.append(0)
+                flaglike = False
+                for j in range(len(likelist1)):
+                    if result[i]['link'] == likelist1[j]['link']:
+                        lm1.append(1)
+                        flaglike = True
+                        break
+                if not flaglike:
+                    lm1.append(0)
+                flagfav = False
+                for j in range(len(favlist1)):
+                    if result[i]['link'] == favlist1[j]['link']:
+                        fm1.append(1)
+                        flagfav = True
+                        break
+                if not flagfav:
+                    fm1.append(0)
 
 
             for i in range(1,len(result)):
@@ -118,10 +288,35 @@ def search_results():
                     elif webj is None and webj1 is not None:
                         result[j], result[j + 1] = result[j + 1], result[j]
             dbr = dict()
-            for i in range(0,3):
+            brlist = []
+            lm2=[]
+            fm2=[]
+            for i in range(0, 3):
                 dbr[i] = result[i]
+                web = lit_db.get_lit(result[i]['title'])
+                if web is not None:
+                    brlist.append(web['browses'])
+                else:
+                    brlist.append(0)
+                flaglike = False
+                for j in range(len(likelist1)):
+                    if result[i]['link'] == likelist1[j]['link']:
+                        lm2.append(1)
+                        flaglike = True
+                        break
+                if not flaglike:
+                    lm2.append(0)
+                flagfav = False
+                for j in range(len(favlist1)):
+                    if result[i]['link'] == favlist1[j]['link']:
+                        fm2.append(1)
+                        flagfav = True
+                        break
+                if not flagfav:
+                    fm2.append(0)
             return render_template('literature_search_results.html', dic=d, query=query, search_type=search_type,
-                                   dlike=dlike,dbr=dbr,dfav=dfav, pn=pn,
+                                   dlike=dlike,dbr=dbr,dfav=dfav, pn=pn,likelist=likelist,favlist=favlist,brlist=brlist,
+                                   likemask=likemask,favmask=favmask,lm=lm,fm=fm,lm1=lm1,fm1=fm1,lm2=lm2,fm2=fm2,
                                    username=username)
 
 
@@ -144,6 +339,11 @@ def good():
         else:
             web_db.update_web_item(web['id'], url, web['title'], web['origin'], web['snippet'], web['time_origin'],
                                    web['likes'] + 1, web['favorites'], web['browses'])
+        web_like_db = database.get_web_like_database()
+        time = datetime.datetime.now()
+        time_now = str(time.year) + '.' + str(time.month) + '.' + str(time.day) + ',' + str(time.hour) + ':' + str(
+            time.minute)
+        web_like_db.add_web_like(username,title,url,time_now)
         return redirect(
             '/search_results?q=' + query + '&search_type=' + search_type + '&pn=' + pn + '&username=' + username)
     elif search_type == 'literature':
@@ -161,6 +361,11 @@ def good():
             lit_db.update_literature_item(lit['id'], url, lit['title'], lit['link_pdf'], lit['snippet'], lit['author'],
                                           lit['summary_path'], lit['cites'],
                                           lit['likes'] + 1, lit['favorites'], lit['browses'])
+        web_like_db = database.get_literature_like_database()
+        time = datetime.datetime.now()
+        time_now = str(time.year) + '.' + str(time.month) + '.' + str(time.day) + ',' + str(time.hour) + ':' + str(
+            time.minute)
+        web_like_db.add_literature_like(username,title,url,time_now)
         return redirect(
             '/search_results?q=' + query + '&search_type=' + search_type + '&pn=' + pn + '&username=' + username)
 
@@ -278,7 +483,7 @@ def favorite():
         time = datetime.datetime.now()
         time_now = str(time.year) + '.' + str(time.month) + '.' + str(time.day) + ',' + str(time.hour) + ':' + str(
             time.minute)
-        web_db.add_web_favorite(username, url, time_now)
+        web_db.add_web_favorite(username, title, url, time_now)
         # print('done')
         return redirect(
             '/search_results?q=' + query + '&search_type=' + search_type + '&pn=' + pn + '&username=' + username)
@@ -302,6 +507,6 @@ def favorite():
         time = datetime.datetime.now()
         time_now = str(time.year) + '.' + str(time.month) + '.' + str(time.day) + ',' + str(time.hour) + ':' + str(
             time.minute)
-        lit_db.add_literature_favorite(username, url, time_now)
+        lit_db.add_literature_favorite(username, title, url, time_now)
         return redirect(
             '/search_results?q=' + query + '&search_type=' + search_type + '&pn=' + pn + '&username=' + username)

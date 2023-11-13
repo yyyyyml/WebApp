@@ -4,57 +4,60 @@
 
 <head>
     <title>My favorite</title>
-    
+
     <style>
         /* 设置整体页面背景色和文字颜色 */
-body {
-    background-color: #f5f5f5; /* 柔和的背景色 */
-    color: #333;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
+        body {
+            background-color: #f5f5f5;
+            /* 柔和的背景色 */
+            color: #333;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
-/* 设定标题样式 */
-h1 {
-    text-align: center;
-    color: #0078d4;
-    padding: 20px; /* 增加标题的内边距 */
-}
+        /* 设定标题样式 */
+        h1 {
+            text-align: center;
+            color: #0078d4;
+            padding: 20px;
+            /* 增加标题的内边距 */
+        }
 
-/* 设定表格样式 */
-table {
-    width: 80%;
-    border-collapse: collapse;
-    margin: 20px auto;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        /* 设定表格样式 */
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-/* 设定表头样式 */
-th {
-    background-color: #0078d4;
-    color: #fff;
-    font-weight: bold;
-    padding: 10px;
-    text-align: left;
-}
+        /* 设定表头样式 */
+        th {
+            background-color: #0078d4;
+            color: #fff;
+            font-weight: bold;
+            padding: 10px;
+            text-align: left;
+        }
 
-/* 设定表格行交替背景色 */
-tr:nth-child(even) {
-    background-color: #f9f9f9; /* 更柔和的交替背景色 */
-}
+        /* 设定表格行交替背景色 */
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+            /* 更柔和的交替背景色 */
+        }
 
-/* 设定表格数据单元格样式 */
-td {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: left;
-}
-
-
+        /* 设定表格数据单元格样式 */
+        td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
     </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_favorites.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_header.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_result.css') }}">
 </head>
 
 <body>
@@ -62,67 +65,141 @@ td {
         <a class="logo" href="{{ url_for('index_ctrl.index') }}">搜索分析平台</a>
 
         <!-- 用户容器包括用户图标和用户名 -->
-        <div class="user-container">
-            <div class="user-icon">
-                {{ username[0] }}
-            </div>
-            <div class="username">
-                {{ username }}
-            </div>
+        <div class="header-content">
 
-            <!-- 用户浮窗 -->
-            <div class="user-popup">
-                <a href="{{ url_for('relation_ctrl.favorites', username=username) }}">我的收藏</a>
-                <a href="{{ url_for('relation_ctrl.history', username=username) }}">历史记录</a>
-                <a href="{{ url_for('relation_ctrl.judge', username=username) }}">用户反馈</a>
-                <a href="{{ url_for('auth_ctrl.logout', username=username) }}">退出登录</a>
+            
+            <div class="user-container">
+                <div class="user-icon">
+                    {{ username[0] }}
+                </div>
+                <div class="username">
+                    {{ username }}
+                </div>
+
+                <!-- 用户浮窗 -->
+                <div class="user-popup">
+                    <a href="{{ url_for('relation_ctrl.favorites', username=username) }}">我的收藏</a>
+                    <a href="{{ url_for('relation_ctrl.history', username=username) }}">历史记录</a>
+                    <a href="{{ url_for('relation_ctrl.judge', username=username) }}">用户反馈</a>
+                    <a href="{{ url_for('auth_ctrl.logout', username=username) }}">退出登录</a>
+                </div>
+            </div>
+            <div id="toggleDarkMode" class="icon-container">
+                <!-- 亮色图标 -->
+                <svg id="lightIcon" t="1699860832986" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="18037" width="20" height="20" style="display:none;">
+                    <path d="M512 384a128 128 0 1 1-128 128 128 128 0 0 1 128-128m0-85.333333a213.333333 213.333333 0 1 0 213.333333 213.333333 213.333333 213.333333 0 0 0-213.333333-213.333333z m-21.333333-85.333334h42.666666a21.333333 21.333333 0 0 0 21.333334-21.333333v-85.333333a21.333333 21.333333 0 0 0-21.333334-21.333334h-42.666666a21.333333 21.333333 0 0 0-21.333334 21.333334v85.333333a21.333333 21.333333 0 0 0 21.333334 21.333333z m42.666666 597.333334h-42.666666a21.333333 21.333333 0 0 0-21.333334 21.333333v85.333333a21.333333 21.333333 0 0 0 21.333334 21.333334h42.666666a21.333333 21.333333 0 0 0 21.333334-21.333334v-85.333333a21.333333 21.333333 0 0 0-21.333334-21.333333z m384-341.333334h-85.333333a21.333333 21.333333 0 0 0-21.333333 21.333334v42.666666a21.333333 21.333333 0 0 0 21.333333 21.333334h85.333333a21.333333 21.333333 0 0 0 21.333334-21.333334v-42.666666a21.333333 21.333333 0 0 0-21.333334-21.333334zM213.333333 533.333333v-42.666666a21.333333 21.333333 0 0 0-21.333333-21.333334h-85.333333a21.333333 21.333333 0 0 0-21.333334 21.333334v42.666666a21.333333 21.333333 0 0 0 21.333334 21.333334h85.333333a21.333333 21.333333 0 0 0 21.333333-21.333334z m524.8-217.6a21.333333 21.333333 0 0 0 30.293334 0L828.586667 256a21.333333 21.333333 0 0 0 0-30.293333l-29.866667-29.866667a21.333333 21.333333 0 0 0-30.293333 0L708.266667 256a21.333333 21.333333 0 0 0 0 30.293333zM285.866667 708.266667a21.333333 21.333333 0 0 0-30.293334 0L195.413333 768a21.333333 21.333333 0 0 0 0 30.293333l29.866667 29.866667a21.333333 21.333333 0 0 0 30.293333 0L315.733333 768a21.333333 21.333333 0 0 0 0-30.293333z m482.133333 0a21.333333 21.333333 0 0 0-30.293333 0l-29.866667 29.866666a21.333333 21.333333 0 0 0 0 30.293334L768 828.586667a21.333333 21.333333 0 0 0 30.293333 0l29.866667-29.866667a21.333333 21.333333 0 0 0 0-30.293333zM256 315.733333a21.333333 21.333333 0 0 0 30.293333 0l29.866667-29.866666A21.333333 21.333333 0 0 0 315.733333 256L256 195.413333a21.333333 21.333333 0 0 0-30.293333 0l-29.866667 29.866667a21.333333 21.333333 0 0 0 0 30.293333z" p-id="18455" fill="#ffffff"></path>   
+                </svg>
+                <!-- 暗色图标 -->
+                <svg id="darkIcon" t="1699861148996" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="18454" width="20" height="20">
+                    <path d="M512 384a128 128 0 1 1-128 128 128 128 0 0 1 128-128m0-85.333333a213.333333 213.333333 0 1 0 213.333333 213.333333 213.333333 213.333333 0 0 0-213.333333-213.333333z m-21.333333-85.333334h42.666666a21.333333 21.333333 0 0 0 21.333334-21.333333v-85.333333a21.333333 21.333333 0 0 0-21.333334-21.333334h-42.666666a21.333333 21.333333 0 0 0-21.333334 21.333334v85.333333a21.333333 21.333333 0 0 0 21.333334 21.333333z m42.666666 597.333334h-42.666666a21.333333 21.333333 0 0 0-21.333334 21.333333v85.333333a21.333333 21.333333 0 0 0 21.333334 21.333334h42.666666a21.333333 21.333333 0 0 0 21.333334-21.333334v-85.333333a21.333333 21.333333 0 0 0-21.333334-21.333333z m384-341.333334h-85.333333a21.333333 21.333333 0 0 0-21.333333 21.333334v42.666666a21.333333 21.333333 0 0 0 21.333333 21.333334h85.333333a21.333333 21.333333 0 0 0 21.333334-21.333334v-42.666666a21.333333 21.333333 0 0 0-21.333334-21.333334zM213.333333 533.333333v-42.666666a21.333333 21.333333 0 0 0-21.333333-21.333334h-85.333333a21.333333 21.333333 0 0 0-21.333334 21.333334v42.666666a21.333333 21.333333 0 0 0 21.333334 21.333334h85.333333a21.333333 21.333333 0 0 0 21.333333-21.333334z m524.8-217.6a21.333333 21.333333 0 0 0 30.293334 0L828.586667 256a21.333333 21.333333 0 0 0 0-30.293333l-29.866667-29.866667a21.333333 21.333333 0 0 0-30.293333 0L708.266667 256a21.333333 21.333333 0 0 0 0 30.293333zM285.866667 708.266667a21.333333 21.333333 0 0 0-30.293334 0L195.413333 768a21.333333 21.333333 0 0 0 0 30.293333l29.866667 29.866667a21.333333 21.333333 0 0 0 30.293333 0L315.733333 768a21.333333 21.333333 0 0 0 0-30.293333z m482.133333 0a21.333333 21.333333 0 0 0-30.293333 0l-29.866667 29.866666a21.333333 21.333333 0 0 0 0 30.293334L768 828.586667a21.333333 21.333333 0 0 0 30.293333 0l29.866667-29.866667a21.333333 21.333333 0 0 0 0-30.293333zM256 315.733333a21.333333 21.333333 0 0 0 30.293333 0l29.866667-29.866666A21.333333 21.333333 0 0 0 315.733333 256L256 195.413333a21.333333 21.333333 0 0 0-30.293333 0l-29.866667 29.866667a21.333333 21.333333 0 0 0 0 30.293333z" p-id="18038"></path>
+                </svg>
             </div>
         </div>
     </header>
     <h1>Web favorite</h1>
 
     <table>
-    <tr>
-        <th>链接</th>
-        <th>时间</th>
-        <th>操作</th>
-    </tr>
-    {% for favorite in web %}
-    <tr>
-        <td>
-            <a
-                href="{{ url_for('result_ctrl.browse', url = favorite.link, search_type = 'web', username = username) }}">{{
-                favorite.link }}</a>
-        </td>
-        <td>{{ favorite.time}}</td>
-        <td>
-            <a href="/del_web_favor?id={{favorite.id}}&username={{username}}">删除</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-<h1>literature favorite</h1>
-<table>
-    <tr>
-        <th>链接</th>
-        <th>时间</th>
-        <th>操作</th>
-    </tr>
-    {% for favorite in lit %}
-    <tr>
-        <td>
-            <a
-                href="{{ url_for('result_ctrl.browse', url = favorite.link, search_type = 'literature', username = username) }}">{{
-                favorite.link }}</a>
-        </td>
-        <td>{{ favorite.time}}</td>
-        <td>
-            <a href="/del_lit_favor?id={{favorite.id}}&username={{username}}">删除</a>
-            <a href="{{url_for('summary_ctrl.summary', url = favorite.link)}}">总结</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+        <tr>
+            <th>标题</th>
+            <th>来源</th>
+            <th>时间</th>
+            <th>操作</th>
+        </tr>
+        {% for favorite in web_all %}
+        <tr>
+            <td>
+                <a
+                    href="{{ url_for('result_ctrl.browse', url = favorite.link, search_type = 'web', username = username) }}">{{
+                    favorite.title }}</a>
+            </td>
+            <td>{{ favorite.origin}}</td>
+            <td>{{ favorite.time}}</td>
+            <td>
+                <a href="/del_web_favor?id={{favorite.id}}&username={{username}}">删除</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h1>literature favorite</h1>
+    <table>
+        <tr>
+            <th>标题</th>
+            <th>作者</th>
+            <th>时间</th>
+            <th>操作</th>
+        </tr>
+        {% for favorite in lit_all %}
+        <tr>
+            <td>
+                <a
+                    href="{{ url_for('result_ctrl.browse', url = favorite.link, search_type = 'literature', username = username) }}">{{
+                    favorite.title }}</a>
+            </td>
+            <td>{{ history.author }}</td>
+            <td>{{ favorite.time}}</td>
+            <td>
+                <a href="/del_lit_favor?id={{favorite.id}}&username={{username}}">删除</a>
+                <a href="{{url_for('summary_ctrl.summary', url = favorite.link)}}">总结</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <script src="https://cdn.jsdelivr.net/npm/darkreader@4.9.67/darkreader.min.js"></script>
+        <script>
+            // 获取切换按钮元素
+            const toggleButton = document.getElementById('toggleDarkMode');
+
+            // 获取亮色图标和暗色图标元素
+            const lightIcon = document.getElementById('lightIcon');
+            const darkIcon = document.getElementById('darkIcon');
+
+            // 切换 Dark Mode 的函数
+            function toggleDarkMode() {
+                // 检查 Dark Reader 的状态
+                const isEnabled = localStorage.getItem('darkModeEnabled') === 'true';
+
+                // 根据状态切换图标显示
+                if (isEnabled) {
+                    lightIcon.style.display = 'none';
+                    darkIcon.style.display = 'block';
+                } else {
+                    lightIcon.style.display = 'block';
+                    darkIcon.style.display = 'none';
+                }
+
+                // 然后执行 Dark Reader 的切换
+                if (isEnabled) {
+                    DarkReader.disable();
+                    localStorage.setItem('darkModeEnabled', 'false');
+                } else {
+                    DarkReader.enable({
+                        brightness: 100,
+                        contrast: 90,
+                        sepia: 10
+                    });
+                    localStorage.setItem('darkModeEnabled', 'true');
+                }
+            }
+
+            // 为按钮添加点击事件
+            toggleButton.addEventListener('click', toggleDarkMode);
+            // 页面加载时检查并应用 Dark Reader 的状态
+            document.addEventListener('DOMContentLoaded', () => {
+                const isEnabled = localStorage.getItem('darkModeEnabled') === 'true';
+                if (isEnabled) {
+                    DarkReader.enable({
+                        brightness: 100,
+                        contrast: 90,
+                        sepia: 10
+                    });
+                    lightIcon.style.display = 'block';
+                    darkIcon.style.display = 'none';
+                } else {
+                    lightIcon.style.display = 'none';
+                    darkIcon.style.display = 'block';
+                }
+            });
+        </script>
 </body>
 
 </html>
