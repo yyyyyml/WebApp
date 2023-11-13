@@ -11,11 +11,23 @@ relation_ctrl = Blueprint('relation_ctrl', __name__)
 def favorites():
     username = request.args.get('username')
     web_favorite = database.get_web_favorite_database()
-    web = web_favorite.get_web_favorite(username)
+    webs = web_favorite.get_web_favorite(username)
+    web_total = database.get_web_item_database()
+    web_all = []
+    for web in webs:
+        web_title = web_total.get_web_title(web['link'])
+        web_res = web | web_title
+        web_all.append(web_res)
     lit_favorite = database.get_literature_favorite_database()
-    lit = lit_favorite.get_literature_favorite(username)
+    lits = lit_favorite.get_literature_favorite(username)
+    lit_total = database.get_literature_item_database()
+    lit_all = []
+    for lit in lits:
+        lit_title = lit_total.get_lit_title(lit['link'])
+        lit_res = lit | lit_title
+        lit_all.append(lit_res)
     
-    return render_template('favorites.html',username=username,web=web,lit=lit)
+    return render_template('favorites.html',username=username,web_all=web_all,lit_all=lit_all)
 
 @relation_ctrl.route('/history')
 def history():
@@ -23,11 +35,24 @@ def history():
     # 示例：user_history = get_user_history(username)
     username = request.args.get('username')
     web_history = database.get_web_browse_database()
-    web = web_history.get_web_browse(username)
-    lit_history = database.get_literature_browse_database()
-    lit = lit_history.get_literature_browse(username)
+    webs = web_history.get_web_browse(username)
+    web_total = database.get_web_item_database()
+    web_all = []
+    for web in webs:
+        web_title = web_total.get_web_title(web['link'])
+        web_res = web | web_title
+        web_all.append(web_res)
     
-    return render_template('history.html',username=username,web=web,lit=lit)
+    lit_history = database.get_literature_browse_database()
+    lits = lit_history.get_literature_browse(username)
+    lit_total = database.get_literature_item_database()
+    lit_all = []
+    for lit in lits:
+        lit_title = lit_total.get_lit_title(lit['link'])
+        lit_res = lit | lit_title
+        lit_all.append(lit_res)
+    
+    return render_template('history.html',username=username,web_all=web_all,lit_all=lit_all)
 
 @relation_ctrl.route('/del_web')
 def del_web():
@@ -36,11 +61,24 @@ def del_web():
     web = database.get_web_browse_database()
     web.delete_web_browse(nid)
     web_history = database.get_web_browse_database()
-    web = web_history.get_web_browse(username)
-    lit_history = database.get_literature_browse_database()
-    lit = lit_history.get_literature_browse(username)
+    webs = web_history.get_web_browse(username)
+    web_total = database.get_web_item_database()
+    web_all = []
+    for web in webs:
+        web_title = web_total.get_web_title(web['link'])
+        web_res = web | web_title
+        web_all.append(web_res)
     
-    return render_template('history.html',username=username,web=web,lit=lit)
+    lit_history = database.get_literature_browse_database()
+    lits = lit_history.get_literature_browse(username)
+    lit_total = database.get_literature_item_database()
+    lit_all = []
+    for lit in lits:
+        lit_title = lit_total.get_lit_title(lit['link'])
+        lit_res = lit | lit_title
+        lit_all.append(lit_res)
+    
+    return render_template('history.html',username=username,web_all=web_all,lit_all=lit_all)
 
 @relation_ctrl.route('/del_lit')
 def del_lit():
@@ -49,11 +87,24 @@ def del_lit():
     web = database.get_literature_browse_database()
     web.delete_literature_browse(nid)
     web_history = database.get_web_browse_database()
-    web = web_history.get_web_browse(username)
-    lit_history = database.get_literature_browse_database()
-    lit = lit_history.get_literature_browse(username)
+    webs = web_history.get_web_browse(username)
+    web_total = database.get_web_item_database()
+    web_all = []
+    for web in webs:
+        web_title = web_total.get_web_title(web['link'])
+        web_res = web | web_title
+        web_all.append(web_res)
     
-    return render_template('history.html',username=username,web=web,lit=lit)
+    lit_history = database.get_literature_browse_database()
+    lits = lit_history.get_literature_browse(username)
+    lit_total = database.get_literature_item_database()
+    lit_all = []
+    for lit in lits:
+        lit_title = lit_total.get_lit_title(lit['link'])
+        lit_res = lit | lit_title
+        lit_all.append(lit_res)
+    
+    return render_template('history.html',username=username,web_all=web_all,lit_all=lit_all)
 
 @relation_ctrl.route('/del_web_favor')
 def del_web_favor():
@@ -62,11 +113,23 @@ def del_web_favor():
     web = database.get_web_favorite_database()
     web.delete_web_favorite(nid)
     web_favorite = database.get_web_favorite_database()
-    web = web_favorite.get_web_favorite(username)
+    webs = web_favorite.get_web_favorite(username)
+    web_total = database.get_web_item_database()
+    web_all = []
+    for web in webs:
+        web_title = web_total.get_web_title(web['link'])
+        web_res = web | web_title
+        web_all.append(web_res)
     lit_favorite = database.get_literature_favorite_database()
-    lit = lit_favorite.get_literature_favorite(username)
+    lits = lit_favorite.get_literature_favorite(username)
+    lit_total = database.get_literature_item_database()
+    lit_all = []
+    for lit in lits:
+        lit_title = lit_total.get_lit_title(lit['link'])
+        lit_res = lit | lit_title
+        lit_all.append(lit_res)
     
-    return render_template('favorites.html',username=username,web=web,lit=lit)
+    return render_template('favorites.html',username=username,web_all=web_all,lit_all=lit_all)
 
 @relation_ctrl.route('/del_lit_favor')
 def del_lit_favor():
@@ -75,11 +138,23 @@ def del_lit_favor():
     web = database.get_literature_favorite_database()
     web.delete_literature_favorite(nid)
     web_favorite = database.get_web_favorite_database()
-    web = web_favorite.get_web_favorite(username)
+    webs = web_favorite.get_web_favorite(username)
+    web_total = database.get_web_item_database()
+    web_all = []
+    for web in webs:
+        web_title = web_total.get_web_title(web['link'])
+        web_res = web | web_title
+        web_all.append(web_res)
     lit_favorite = database.get_literature_favorite_database()
-    lit = lit_favorite.get_literature_favorite(username)
+    lits = lit_favorite.get_literature_favorite(username)
+    lit_total = database.get_literature_item_database()
+    lit_all = []
+    for lit in lits:
+        lit_title = lit_total.get_lit_title(lit['link'])
+        lit_res = lit | lit_title
+        lit_all.append(lit_res)
     
-    return render_template('favorites.html',username=username,web=web,lit=lit)
+    return render_template('favorites.html',username=username,web_all=web_all,lit_all=lit_all)
 
 @relation_ctrl.route('/judge', methods=['GET', 'POST'])
 def judge():

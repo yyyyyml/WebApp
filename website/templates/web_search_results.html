@@ -85,18 +85,18 @@
                     </h3>
                     <div class="result-meta">
                         <span class="meta-item">
-                            {% if lm[key-1]==0 %}
+                            {% if likemask[key-1]==0 %}
                             <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
-                            {% elif lm[key-1]==1 %}
+                            {% elif likemask[key-1]==1 %}
                             赞过
                             {% endif %}
                             &nbsp
                             <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
                             &nbsp
-                            {% if fm[key-1]==0 %}
+                            {% if favmask[key-1]==0 %}
                             <a
                                 href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
-                            {% elif fm[key-1]==1 %}
+                            {% elif favmask[key-1]==1 %}
                             收藏过
                             {% endif %}
                             
@@ -164,18 +164,18 @@
                     </h3>
                     <div class="result-meta">
                         <span class="meta-item">
-                            {% if lm[key-1]==0 %}
+                            {% if lm1[key-1]==0 %}
                             <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
-                            {% elif lm[key-1]==1 %}
+                            {% elif lm1[key-1]==1 %}
                             赞过
                             {% endif %}
                             &nbsp
                             <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
                             &nbsp
-                            {% if fm[key-1]==0 %}
+                            {% if fm1[key-1]==0 %}
                             <a
                                 href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
-                            {% elif fm[key-1]==1 %}
+                            {% elif fm1[key-1]==1 %}
                             收藏过
                             {% endif %}
                             
@@ -196,18 +196,18 @@
                     </h3>
                     <div class="result-meta">
                         <span class="meta-item">
-                            {% if lm[key-1]==0 %}
+                            {% if lm2[key-1]==0 %}
                             <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
-                            {% elif lm[key-1]==1 %}
+                            {% elif lm2[key-1]==1 %}
                             赞过
                             {% endif %}
                             &nbsp
                             <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
                             &nbsp
-                            {% if fm[key-1]==0 %}
+                            {% if fm2[key-1]==0 %}
                             <a
                                 href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
-                            {% elif fm[key-1]==1 %}
+                            {% elif fm2[key-1]==1 %}
                             收藏过
                             {% endif %}
                             

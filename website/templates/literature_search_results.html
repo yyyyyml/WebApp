@@ -128,17 +128,17 @@
                         </h3>
                         <div class="result-meta">
                             <span class="meta-item">
-                                {% if likemask[key]==0 %}
+                                {% if lm[key]==0 %}
                                 <a href='/good?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>赞</a>
-                                {% elif likemask[key]==1 %}
+                                {% elif lm[key]==1 %}
                                 赞过
                                 {% endif %}
                                 &nbsp
                                 <a href='/bad?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>踩</a>
                                 &nbsp
-                                {% if favmask[key]==0 %}
+                                {% if fm[key]==0 %}
                                 <a href='/favorite?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>收藏</a>
-                                {% elif favmask[key]==1 %}
+                                {% elif fm[key]==1 %}
                                 收藏过
                                 {% endif %}
                                 <span class="meta-details">{{ value["authors"] }}, {{ value["citations"] }},点赞量:{{likelist[key]}}</span>
@@ -164,17 +164,17 @@
                         </h3>
                         <div class="result-meta">
                             <span class="meta-item">
-                                {% if likemask[key]==0 %}
+                                {% if lm1[key]==0 %}
                                 <a href='/good?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>赞</a>
-                                {% elif likemask[key]==1 %}
+                                {% elif lm1[key]==1 %}
                                 赞过
                                 {% endif %}
                                 &nbsp
                                 <a href='/bad?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>踩</a>
                                 &nbsp
-                                {% if favmask[key]==0 %}
+                                {% if fm1[key]==0 %}
                                 <a href='/favorite?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>收藏</a>
-                                {% elif favmask[key]==1 %}
+                                {% elif fm1[key]==1 %}
                                 收藏过
                                 {% endif %}
                                 <span class="meta-details">{{ value["authors"] }}, {{ value["citations"] }},收藏量:{{favlist[key]}}</span>
@@ -200,17 +200,17 @@
                         </h3>
                         <div class="result-meta">
                             <span class="meta-item">
-                                {% if likemask[key]==0 %}
+                                {% if lm2[key]==0 %}
                                 <a href='/good?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>赞</a>
-                                {% elif likemask[key]==1 %}
+                                {% elif lm2[key]==1 %}
                                 赞过
                                 {% endif %}
                                 &nbsp
                                 <a href='/bad?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>踩</a>
                                 &nbsp
-                                {% if favmask[key]==0 %}
+                                {% if fm2[key]==0 %}
                                 <a href='/favorite?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>收藏</a>
-                                {% elif favmask[key]==1 %}
+                                {% elif fm2[key]==1 %}
                                 收藏过
                                 {% endif %}
                                 <span class="meta-details">{{ value["authors"] }}, {{ value["citations"] }},浏览量:{{brlist[key]}}</span>

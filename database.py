@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import json
 
 # 数据库文件路径
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -13,6 +14,8 @@ WEB_BROWSES_DB = os.path.join(BASE_DIR, 'databases/web_browses.sqlite')
 LITERATURE_FAVORITES_DB = os.path.join(BASE_DIR, 'databases/literature_favorites.sqlite')
 LITERATURE_LIKES_DB = os.path.join(BASE_DIR, 'databases/literature_likes.sqlite')
 LITERATURE_BROWSES_DB = os.path.join(BASE_DIR, 'databases/literature_browses.sqlite')
+WEB_SEARCH_DB = os.path.join(BASE_DIR, 'databases/web_search.sqlite')
+LITERATURE_SEARCH_DB = os.path.join(BASE_DIR, 'databases/literature_search.sqlite')
 
 def get_user_database():
     return UserDatabase(USERS_DB)
@@ -43,6 +46,12 @@ def get_literature_favorite_database():
 
 def get_literature_browse_database():
     return LiteratureBrowseDatabase(LITERATURE_BROWSES_DB)
+
+def get_web_search_database():
+    return WebSearchDatabase(WEB_SEARCH_DB)
+
+def get_literature_search_database():
+    return LiteratureSearchDatabase(LITERATURE_SEARCH_DB)
 
 class UserDatabase:
     def __init__(self, db_file):
@@ -613,4 +622,114 @@ class LiteratureBrowseDatabase:
             }
             history_list.append(history_info)
         return history_list
+
+
+class WebSearchDatabase:
+    def __init__(self, db_file):
+        self.conn = sqlite3.connect(db_file)
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS web_search (
+            id INTEGER PRIMARY KEY,
+            query TEXT,
+            page INTEGER,
+            result TEXT
+        )''')
+        self.conn.commit()
+
+    def add_web_search_result(self, query, page, result):
+        result_json = json.dumps(result)
+        self.cursor.execute("INSERT INTO web_search (query, page, result) VALUES (?, ?, ?)",
+                            (query, page, result_json))
+        self.conn.commit()
+
+    def update_web_search_result(self, result_id, query, page, result):
+        result_json = json.dumps(result)
+        self.cursor.execute("UPDATE web_search SET query=?, page=?, result=? WHERE id=?", 
+                            (query, page, result_json, result_id))
+        self.conn.commit()
+
+    def delete_web_search_result(self, result_id):
+        self.cursor.execute("DELETE FROM web_search WHERE id=?", (result_id,))
+        self.conn.commit()
+    
+    def get_web_search_result(self, query, pn):
+        self.cursor.execute("SELECT * FROM web_search WHERE query=? AND page=?", (query, pn))
+        result = self.cursor.fetchone()
+        if result:
+            return {
+                'id': result[0],
+                'query': result[1],
+                'pn': result[2],
+                'result': json.loads(result[3])  # 假设结果以 JSON 字符串形式存储在数据库中
+            }
+        else:
+            return None
+
+    def get_all_web_search_results(self):
+        self.cursor.execute("SELECT * FROM web_search")
+        search_results = self.cursor.fetchall()
+        results_list = []
+        for search_result in search_results:
+            result_info = {
+                'id': search_result[0],
+                'query': search_result[1],
+                'page': search_result[2],
+                'result': json.loads(search_result[3])
+            }
+            results_list.append(result_info)
+        return results_list
+
+
+class LiteratureSearchDatabase:
+    def __init__(self, db_file):
+        self.conn = sqlite3.connect(db_file)
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS literature_search (
+            id INTEGER PRIMARY KEY,
+            query TEXT,
+            page INTEGER,
+            result TEXT
+        )''')
+        self.conn.commit()
+
+    def add_literature_search_result(self, query, page, result):
+        result_json = json.dumps(result)
+        self.cursor.execute("INSERT INTO literature_search (query, page, result) VALUES (?, ?, ?)",
+                            (query, page, result_json))
+        self.conn.commit()
+
+    def update_literature_search_result(self, result_id, query, page, result):
+        result_json = json.dumps(result)
+        self.cursor.execute("UPDATE literature_search SET query=?, page=?, result=? WHERE id=?", 
+                            (query, page, result_json, result_id))
+        self.conn.commit()
+
+    def get_literature_search_result(self, query, pn):
+        self.cursor.execute("SELECT * FROM literature_search WHERE query=? AND page=?", (query, pn))
+        result = self.cursor.fetchone()
+        if result:
+            return {
+                'id': result[0],
+                'query': result[1],
+                'pn': result[2],
+                'result': json.loads(result[3])  # 假设结果以 JSON 字符串形式存储在数据库中
+            }
+        else:
+            return None
+
+    def get_all_literature_search_results(self):
+        self.cursor.execute("SELECT * FROM literature_search")
+        search_results = self.cursor.fetchall()
+        results_list = []
+        for search_result in search_results:
+            result_info = {
+                'id': search_result[0],
+                'query': search_result[1],
+                'page': search_result[2],
+                'result': json.loads(search_result[3])
+            }
+            results_list.append(result_info)
+        return results_list
+
+
 

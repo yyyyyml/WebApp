@@ -3,6 +3,10 @@ from database import get_user_database
 
 auth_ctrl = Blueprint('auth_ctrl', __name__)
 
+@auth_ctrl.route('/')
+def root():
+    return redirect(url_for('auth_ctrl.login'))
+
 @auth_ctrl.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':

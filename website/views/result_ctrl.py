@@ -21,12 +21,26 @@ def search_results():
     # print(type(pn))
     pn = int(pn)
     if search_type == 'web':
-        result = baidu1.baidu_search(query=query, pn=pn)
-        pprint(result)
+        web_search_db = database.get_web_search_database()
+        # 检查数据库中是否存在结果
+        existing_result = web_search_db.get_web_search_result(query, pn)
+
+        if existing_result:
+            # 如果结果已存在，使用已有结果
+            result = existing_result['result']
+            print("已有的搜索结果")
+        else:
+            # 如果结果不存在，调用搜索函数
+            result = baidu1.baidu_search(query=query, pn=pn)
+            pprint(result)
+            # 将新结果存入数据库
+            web_search_db.add_web_search_result(query, pn, result)
+        
         if len(result) <=1:
             return render_template('web_error.html')
         else:
             web_fav_db = database.get_web_favorite_database()
+            
             favlist1 = web_fav_db.get_web_favorite(username)
             web_like_db = database.get_web_like_database()
             likelist1= web_like_db.get_web_like(username)
@@ -35,7 +49,7 @@ def search_results():
             for i in range(1,len(result)):
                 flaglike = False
                 for j in range(len(likelist1)):
-                    if result[i]['url']==likelist1[j]['link']:
+                    if result[i]['title']==likelist1[j]['title']:
                         likemask.append(1)
                         flaglike=True
                         break
@@ -44,7 +58,7 @@ def search_results():
             for i in range(1,len(result)):
                 flagfav = False
                 for j in range(len(favlist1)):
-                    if result[i]['url']==favlist1[j]['link']:
+                    if result[i]['title']==favlist1[j]['title']:
                         favmask.append(1)
                         flagfav=True
                         break
@@ -79,7 +93,7 @@ def search_results():
                     likelist.append(0)
                 flaglike = False
                 for j in range(len(likelist1)):
-                    if result[i]['url'] == likelist1[j]['link']:
+                    if result[i]['title'] == likelist1[j]['title']:
                         lm.append(1)
                         flaglike = True
                         break
@@ -87,7 +101,7 @@ def search_results():
                     lm.append(0)
                 flagfav = False
                 for j in range(len(favlist1)):
-                    if result[i]['url'] == favlist1[j]['link']:
+                    if result[i]['title'] == favlist1[j]['title']:
                         fm.append(1)
                         flagfav = True
                         break
@@ -116,7 +130,7 @@ def search_results():
                     favlist.append(0)
                 flaglike = False
                 for j in range(len(likelist1)):
-                    if result[i]['url'] == likelist1[j]['link']:
+                    if result[i]['title'] == likelist1[j]['title']:
                         lm1.append(1)
                         flaglike = True
                         break
@@ -124,7 +138,7 @@ def search_results():
                     lm1.append(0)
                 flagfav = False
                 for j in range(len(favlist1)):
-                    if result[i]['url'] == favlist1[j]['link']:
+                    if result[i]['title'] == favlist1[j]['title']:
                         fm1.append(1)
                         flagfav = True
                         break
@@ -153,7 +167,7 @@ def search_results():
                     brlist.append(0)
                 flaglike = False
                 for j in range(len(likelist1)):
-                    if result[i]['url'] == likelist1[j]['link']:
+                    if result[i]['title'] == likelist1[j]['title']:
                         lm2.append(1)
                         flaglike = True
                         break
@@ -161,7 +175,7 @@ def search_results():
                     lm2.append(0)
                 flagfav = False
                 for j in range(len(favlist1)):
-                    if result[i]['url'] == favlist1[j]['link']:
+                    if result[i]['title'] == favlist1[j]['title']:
                         fm2.append(1)
                         flagfav = True
                         break
@@ -173,7 +187,21 @@ def search_results():
                                    likemask=likemask,favmask=favmask,lm=lm,fm=fm,lm1=lm1,fm1=fm1,lm2=lm2,fm2=fm2,
                                    pn=pn, username=username)
     elif search_type == 'literature':
-        result = google1.google_scholar_search(query, pn)
+        lit_search_db = database.get_literature_search_database()
+        # 检查数据库中是否存在结果
+        existing_result = lit_search_db.get_literature_search_result(query, pn)
+
+        if existing_result:
+            # 如果结果已存在，使用已有结果
+            result = existing_result['result']
+            print("已有的搜索结果")
+        else:
+            # 如果结果不存在，调用搜索函数
+            result = google1.google_scholar_search(query, pn)
+            pprint(result)
+            # 将新结果存入数据库
+            lit_search_db.add_literature_search_result(query, pn, result)
+        
         if len(result) == 0:
             return render_template('web_error.html')
         else:
@@ -478,7 +506,7 @@ def favorite():
         if web == None:
             web_db_item.add_web_item(url, title, origin,snippet,time_origin, 0, 1, 0)
         else:
-            web_db.update_web_item(web['id'], url, web['title'], web['origin'], web['snippet'], web['time_origin'],
+            web_db_item.update_web_item(web['id'], url, web['title'], web['origin'], web['snippet'], web['time_origin'],
                                    web['likes'], web['favorites'] + 1, web['browses'])
         time = datetime.datetime.now()
         time_now = str(time.year) + '.' + str(time.month) + '.' + str(time.day) + ',' + str(time.hour) + ':' + str(
