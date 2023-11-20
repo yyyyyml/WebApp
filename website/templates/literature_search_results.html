@@ -60,7 +60,7 @@
         <form class="search-form" action="{{ url_for('result_ctrl.search_results')}}" method="get">
             <div class="search-container">
                 <div class="search-box">
-                    <input class="search-input" type="text" name="q" placeholder="Search...">
+                    <input class="search-input" type="text" name="q" placeholder="{{query}}">
                     <input type="hidden" name="pn" value="1">
                     <input type="hidden" name="username" value="{{ username }}">
                     <select class="search-type" name="search_type">
@@ -228,8 +228,17 @@
             </div>
         </div>
         <div class="pagination-links">
-            <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn+1)) }}">下一页</a>
-            <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn-1)) }}">上一页</a>
+            {% if pn>1 %}
+            <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn-1),username=username)}}">上一页</a>
+            {% endif %}
+            {% for i in range(1,5) %}
+            {% if i!=pn %}
+            <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=i,username=username) }}">{{i}}</a>
+            {% endif %}
+            {% endfor %}
+            {% if pn<5 %}
+            <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn+1),username=username) }}">下一页</a>
+            {% endif %}
         </div>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script>
