@@ -258,6 +258,7 @@ class LiteratureItemDatabase:
         lit = self.cursor.fetchone()
         return {
             'title': lit[2],
+            'link_pdf': lit[3],
             'author': lit[5]
         }
 

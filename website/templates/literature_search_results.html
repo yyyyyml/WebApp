@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <title>搜索分析平台</title>
     <style>
         body {
             background-color: #f0f0f0;
@@ -62,7 +63,7 @@
             <form class="search-form" action="{{ url_for('result_ctrl.search_results')}}" method="get">
                 <div class="search-container">
                     <div class="search-box">
-                        <input class="search-input" type="text" name="q" placeholder="{{query}}">
+                        <input class="search-input" type="text" name="q" value="{{ query }}" placeholder="请输入您要搜索的关键词">
                         <input type="hidden" name="pn" value="1">
                         <input type="hidden" name="username" value="{{ username }}">
                         <select class="search-type" name="search_type">
@@ -106,7 +107,7 @@
                             <p class="result-snippet">{{ value["snippet"] }}</p>
                             {% if value["pdf_link"] %}
                             <a href='{{ value["pdf_link"] }}' class="pdf-link">PDF</a>
-                            <a href='/summary?url={{ value["pdf_link"] }}?username={{username}}' class="summary-link">总结</a>
+                            <a href="{{ url_for('summary_ctrl.summary', url=value['pdf_link'], username=username) }}" class="summary-link">总结</a>
                             {% endif %}
                         </div>
                         {% endfor %}

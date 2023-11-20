@@ -16,12 +16,14 @@ def summary():
     # 获取文献的 URL 参数
     url = request.args.get('url')
     pdf_path = request.args.get('pdf_path')
-    pdf_filename = request.args.get('pdf_filename')
     username = request.args.get('username')
+    pdf_filename = request.args.get('pdf_filename')
+    
+    print(url)
     
     if pdf_path is None:
         # 将 URL 进行处理以作为文件名
-        paper_filename = url.replace('/', '_').replace(':', '_').replace('?', '_')
+        paper_filename = url.replace('/', '_').replace(':', '_')
         # 检查文件是否已存在，如果存在则不重新写入
         pdf_path = os.path.join('papers', paper_filename)
     else:

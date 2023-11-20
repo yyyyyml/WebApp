@@ -1,4 +1,5 @@
 from pprint import pprint
+import re
 import requests
 from bs4 import BeautifulSoup
 
@@ -49,6 +50,12 @@ def google_scholar_search(query, pn=1):
             if pdf_id == result_id:
                 pdf_link = result_pdf.find("a")["href"]
                 index += 1
+                
+            # 使用正则表达式去掉方括号及其内容
+            title = re.sub(r'\[.*?\]', '', title).strip()
+            # 检查 pdf_link 是否需要添加 .pdf 后缀
+            if not pdf_link is None and pdf_link.startswith("https://arxiv.org/arxiv/pdf/") and not pdf_link.endswith(".pdf"):
+                pdf_link += ".pdf"
 
             result_info = {
                 "title": title,

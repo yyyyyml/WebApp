@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>My History</title>
+    <title>搜索分析平台</title>
     <style>
         body {
             background-color: #f0f0f0;
@@ -92,6 +92,11 @@
                                 <a href="/del_lit?id={{history.id}}&username={{username}}">删除</a>
                             </span>
                         </div>
+                        {% if history.link_pdf %}
+                        <a href='{{ history.link_pdf }}' class="pdf-link">PDF</a>
+                        <a href="{{url_for('summary_ctrl.summary', url = history.link_pdf, username=username)}}"
+                            class="summary-link">总结</a>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </dl>
