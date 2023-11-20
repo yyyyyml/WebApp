@@ -22,6 +22,7 @@
     <title>Search</title>
 </head>
     <body>
+
         <header class="header">
             <a class="logo" href="{{ url_for('index_ctrl.index') }}">搜索分析平台</a>
     
@@ -57,188 +58,192 @@
                 </div>
             </div>
         </header>
-        <form class="search-form" action="{{ url_for('result_ctrl.search_results')}}" method="get">
-            <div class="search-container">
-                <div class="search-box">
-                    <input class="search-input" type="text" name="q" placeholder="{{query}}">
-                    <input type="hidden" name="pn" value="1">
-                    <input type="hidden" name="username" value="{{ username }}">
-                    <select class="search-type" name="search_type">
-                        <option value="web">Web</option>
-                        <option value="literature">文献</option>
-                    </select>
+        <div class="main-content">
+            <form class="search-form" action="{{ url_for('result_ctrl.search_results')}}" method="get">
+                <div class="search-container">
+                    <div class="search-box">
+                        <input class="search-input" type="text" name="q" placeholder="{{query}}">
+                        <input type="hidden" name="pn" value="1">
+                        <input type="hidden" name="username" value="{{ username }}">
+                        <select class="search-type" name="search_type">
+                            <option value="web">网页</option>
+                            <option value="literature">文献</option>
+                        </select>
+                    </div>
+                    <button class="search-button" type="submit">
+                        <i class="fa fa-search"></i> 搜索
+                    </button>
                 </div>
-                <button class="search-button" type="submit">
-                    <i class="fa fa-search"></i> Search
-                </button>
-            </div>
-        </form>
-        <div class="results-container">
-            <div class="main-results">
-                <dl>
-                    {% for key, value in dic.items() %}
-                    <div class="result-item">
-                        <h3>
-                            <a href='/browse?url={{ value["link"] }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}&title={{ value["title"] }}'>
-                                {{ value["title"] }}
-                            </a>
-                        </h3>
-                        <div class="result-meta">
-                            <span class="meta-item">
-                                {% if likemask[key]==0 %}
-                                <a href='/good?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>赞</a>
-                                {% elif likemask[key]==1 %}
-                                赞过
-                                {% endif %}
-                                &nbsp
-                                <a href='/bad?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>踩</a>
-                                &nbsp
-                                {% if favmask[key]==0 %}
-                                <a href='/favorite?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>收藏</a>
-                                {% elif favmask[key]==1 %}
-                                收藏过
-                                {% endif %}
-                                <span class="meta-details">{{ value["authors"] }}, {{ value["citations"] }}</span>
-                            </span>
+            </form>
+            <div class="results-container">
+                <div class="main-results">
+                    <dl>
+                        {% for key, value in dic.items() %}
+                        <div class="result-item">
+                            <h3>
+                                <a href='/browse?url={{ value["link"] }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}&title={{ value["title"] }}'>
+                                    {{ value["title"] }}
+                                </a>
+                            </h3>
+                            <div class="result-meta">
+                                <span class="meta-item">
+                                    {% if likemask[key]==0 %}
+                                    <a href='/good?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>赞</a>
+                                    {% elif likemask[key]==1 %}
+                                    赞过
+                                    {% endif %}
+                                    &nbsp
+                                    <a href='/bad?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>踩</a>
+                                    &nbsp
+                                    {% if favmask[key]==0 %}
+                                    <a href='/favorite?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>收藏</a>
+                                    {% elif favmask[key]==1 %}
+                                    收藏过
+                                    {% endif %}
+                                    <span class="meta-details">{{ value["authors"] }}, {{ value["citations"] }}</span>
+                                </span>
+                            </div>
+                            <p class="result-snippet">{{ value["snippet"] }}</p>
+                            {% if value["pdf_link"] %}
+                            <a href='{{ value["pdf_link"] }}' class="pdf-link">PDF</a>
+                            <a href='/summary?url={{ value["pdf_link"] }}?username={{username}}' class="summary-link">总结</a>
+                            {% endif %}
                         </div>
-                        <p class="result-snippet">{{ value["snippet"] }}</p>
-                        {% if value["pdf_link"] %}
-                        <a href='{{ value["pdf_link"] }}' class="pdf-link">.pdf</a>
-                        <a href='/summary?url={{ value["pdf_link"] }}?username={{username}}' class="summary-link">总结</a>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </dl>
-            </div>
-            <div class="side-results">
-                <div class="sort-options">
-                    <div class="sort-option" data-sort="like">点赞数</div>
-                    <div class="sort-option" data-sort="favorite">收藏数</div>
-                    <div class="sort-option" data-sort="browse">浏览数</div>
+                        {% endfor %}
+                    </dl>
                 </div>
-                
-                <dl data-sort="like">
-                    <h2>点赞数前三的结果</h2>
-                    {% for key, value in dlike.items() %}
-                    <div class="result-item">
-                        <h3>
-                            <a href='/browse?url={{ value["link"] }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}&title={{ value["title"] }}'>
-                                {{ value["title"] }}
-                            </a>
-                        </h3>
-                        <div class="result-meta">
-                            <span class="meta-item">
-                                {% if lm[key]==0 %}
-                                <a href='/good?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>赞</a>
-                                {% elif lm[key]==1 %}
-                                赞过
-                                {% endif %}
-                                &nbsp
-                                <a href='/bad?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>踩</a>
-                                &nbsp
-                                {% if fm[key]==0 %}
-                                <a href='/favorite?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>收藏</a>
-                                {% elif fm[key]==1 %}
-                                收藏过
-                                {% endif %}
-                                <span class="meta-details">{{ value["authors"] }}, {{ value["citations"] }},点赞量:{{likelist[key]}}</span>
-                            </span>
-                            <p class="result-snippet">{{ value["snippet"] }}</p>
-                            {% if value["pdf_link"] %}
-                            <a href='{{ value["pdf_link"] }}' class="pdf-link">.pdf</a>
-                            <a href='/summary?url={{ value["pdf_link"] }}' class="summary-link">总结</a>
-                            {% endif %}
-                        </div>
+                <div class="side-results">
+                    <div class="sort-options">
+                        <div class="sort-option" data-sort="like">点赞数</div>
+                        <div class="sort-option" data-sort="favorite">收藏数</div>
+                        <div class="sort-option" data-sort="browse">浏览数</div>
                     </div>
-                    {% endfor %}
-                </dl>
-                
-                <dl data-sort="favorite">
-                    <h2>收藏数前三的结果</h2>
-                    {% for key, value in dfav.items() %}
-                    <div class="result-item">
-                        <h3>
-                            <a href='/browse?url={{ value["link"] }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}&title={{ value["title"] }}'>
-                                {{ value["title"] }}
-                            </a>
-                        </h3>
-                        <div class="result-meta">
-                            <span class="meta-item">
-                                {% if lm1[key]==0 %}
-                                <a href='/good?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>赞</a>
-                                {% elif lm1[key]==1 %}
-                                赞过
+                    
+                    <dl data-sort="like">
+                        <h2>点赞数前三的结果</h2>
+                        {% for key, value in dlike.items() %}
+                        <div class="result-item">
+                            <h3>
+                                <a href='/browse?url={{ value["link"] }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}&title={{ value["title"] }}'>
+                                    {{ value["title"] }}
+                                </a>
+                            </h3>
+                            <div class="result-meta">
+                                <span class="meta-item">
+                                    {% if lm[key]==0 %}
+                                    <a href='/good?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>赞</a>
+                                    {% elif lm[key]==1 %}
+                                    赞过
+                                    {% endif %}
+                                    &nbsp
+                                    <a href='/bad?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>踩</a>
+                                    &nbsp
+                                    {% if fm[key]==0 %}
+                                    <a href='/favorite?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>收藏</a>
+                                    {% elif fm[key]==1 %}
+                                    收藏过
+                                    {% endif %}
+                                    <span class="meta-details">{{ value["authors"] }}, {{ value["citations"] }}, 点赞量:{{likelist[key]}}</span>
+                                </span>
+                                <p class="result-snippet">{{ value["snippet"] }}</p>
+                                {% if value["pdf_link"] %}
+                                <a href='{{ value["pdf_link"] }}' class="pdf-link">PDF</a>
+                                <a href='/summary?url={{ value["pdf_link"] }}' class="summary-link">总结</a>
                                 {% endif %}
-                                &nbsp
-                                <a href='/bad?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>踩</a>
-                                &nbsp
-                                {% if fm1[key]==0 %}
-                                <a href='/favorite?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>收藏</a>
-                                {% elif fm1[key]==1 %}
-                                收藏过
-                                {% endif %}
-                                <span class="meta-details">{{ value["authors"] }}, {{ value["citations"] }},收藏量:{{favlist[key]}}</span>
-                            </span>
-                            <p class="result-snippet">{{ value["snippet"] }}</p>
-                            {% if value["pdf_link"] %}
-                            <a href='{{ value["pdf_link"] }}' class="pdf-link">.pdf</a>
-                            <a href='/summary?url={{ value["pdf_link"] }}' class="summary-link">总结</a>
-                            {% endif %}
+                            </div>
                         </div>
-                    </div>
-                    {% endfor %}
-                </dl>
-                
-                <dl data-sort="browse">
-                    <h2>浏览数前三的结果</h2>
-                    {% for key, value in dbr.items() %}
-                    <div class="result-item">
-                        <h3>
-                            <a href='/browse?url={{ value["link"] }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&username={{ username }}&snippet {{ value["snippet"] }}&author {{ value["authors"] }}&cites {{ value["citations"] }}&title={{ value["title"] }}'>
-                                {{ value["title"] }}
-                            </a>
-                        </h3>
-                        <div class="result-meta">
-                            <span class="meta-item">
-                                {% if lm2[key]==0 %}
-                                <a href='/good?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>赞</a>
-                                {% elif lm2[key]==1 %}
-                                赞过
+                        {% endfor %}
+                    </dl>
+                    
+                    <dl data-sort="favorite">
+                        <h2>收藏数前三的结果</h2>
+                        {% for key, value in dfav.items() %}
+                        <div class="result-item">
+                            <h3>
+                                <a href='/browse?url={{ value["link"] }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}&title={{ value["title"] }}'>
+                                    {{ value["title"] }}
+                                </a>
+                            </h3>
+                            <div class="result-meta">
+                                <span class="meta-item">
+                                    {% if lm1[key]==0 %}
+                                    <a href='/good?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>赞</a>
+                                    {% elif lm1[key]==1 %}
+                                    赞过
+                                    {% endif %}
+                                    &nbsp
+                                    <a href='/bad?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>踩</a>
+                                    &nbsp
+                                    {% if fm1[key]==0 %}
+                                    <a href='/favorite?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>收藏</a>
+                                    {% elif fm1[key]==1 %}
+                                    收藏过
+                                    {% endif %}
+                                    <span class="meta-details">{{ value["authors"] }}, {{ value["citations"] }}, 收藏量:{{favlist[key]}}</span>
+                                </span>
+                                <p class="result-snippet">{{ value["snippet"] }}</p>
+                                {% if value["pdf_link"] %}
+                                <a href='{{ value["pdf_link"] }}' class="pdf-link">PDF</a>
+                                <a href='/summary?url={{ value["pdf_link"] }}' class="summary-link">总结</a>
                                 {% endif %}
-                                &nbsp
-                                <a href='/bad?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>踩</a>
-                                &nbsp
-                                {% if fm2[key]==0 %}
-                                <a href='/favorite?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>收藏</a>
-                                {% elif fm2[key]==1 %}
-                                收藏过
-                                {% endif %}
-                                <span class="meta-details">{{ value["authors"] }}, {{ value["citations"] }},浏览量:{{brlist[key]}}</span>
-                            </span>
-                            <p class="result-snippet">{{ value["snippet"] }}</p>
-                            {% if value["pdf_link"] %}
-                            <a href='{{ value["pdf_link"] }}' class="pdf-link">.pdf</a>
-                            <a href='/summary?url={{ value["pdf_link"] }}' class="summary-link">总结</a>
-                            {% endif %}
+                            </div>
                         </div>
-                    </div>
-                    {% endfor %}
-                </dl>
+                        {% endfor %}
+                    </dl>
+                    
+                    <dl data-sort="browse">
+                        <h2>浏览数前三的结果</h2>
+                        {% for key, value in dbr.items() %}
+                        <div class="result-item">
+                            <h3>
+                                <a href='/browse?url={{ value["link"] }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&username={{ username }}&snippet {{ value["snippet"] }}&author {{ value["authors"] }}&cites {{ value["citations"] }}&title={{ value["title"] }}'>
+                                    {{ value["title"] }}
+                                </a>
+                            </h3>
+                            <div class="result-meta">
+                                <span class="meta-item">
+                                    {% if lm2[key]==0 %}
+                                    <a href='/good?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>赞</a>
+                                    {% elif lm2[key]==1 %}
+                                    赞过
+                                    {% endif %}
+                                    &nbsp
+                                    <a href='/bad?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pdf_link={{ value["pdf_link"] }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>踩</a>
+                                    &nbsp
+                                    {% if fm2[key]==0 %}
+                                    <a href='/favorite?url={{ value["link"] }}&title={{ value["title"] }}&query={{ query }}&search_type={{ search_type }}&pn={{ pn }}&username={{ username }}&snippet={{ value["snippet"] }}&author={{ value["authors"] }}&cites={{ value["citations"] }}'>收藏</a>
+                                    {% elif fm2[key]==1 %}
+                                    收藏过
+                                    {% endif %}
+                                    <span class="meta-details">{{ value["authors"] }}, {{ value["citations"] }}, 浏览量:{{brlist[key]}}</span>
+                                </span>
+                                <p class="result-snippet">{{ value["snippet"] }}</p>
+                                {% if value["pdf_link"] %}
+                                <a href='{{ value["pdf_link"] }}' class="pdf-link">PDF</a>
+                                <a href='/summary?url={{ value["pdf_link"] }}' class="summary-link">总结</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </dl>
 
+                </div>
             </div>
-        </div>
-        <div class="pagination-links">
-            {% if pn>1 %}
-            <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn-1),username=username)}}">上一页</a>
-            {% endif %}
-            {% for i in range(1,5) %}
-            {% if i!=pn %}
-            <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=i,username=username) }}">{{i}}</a>
-            {% endif %}
-            {% endfor %}
-            {% if pn<5 %}
-            <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn+1),username=username) }}">下一页</a>
-            {% endif %}
+            <div class="pagination-links">
+                {% if pn > 1 %}
+                    <a class="n" href="{{ url_for('result_ctrl.search_results', q=query, search_type=search_type, pn=(pn-1), username=username) }}">上一页</a>
+                {% endif %}
+                {% for i in range(1, 6) %}
+                    {% if i == pn %}
+                        <strong><span class="page-item_M4MDr pc current-page">{{ i }}</span></strong>
+                    {% else %}
+                        <a href="{{ url_for('result_ctrl.search_results', q=query, search_type=search_type, pn=i, username=username) }}"><span class="page-item_M4MDr pc">{{ i }}</span></a>
+                    {% endif %}
+                {% endfor %}
+                {% if pn < 5 %}
+                    <a class="n" href="{{ url_for('result_ctrl.search_results', q=query, search_type=search_type, pn=(pn+1), username=username) }}">下一页 &gt;</a>
+                {% endif %}
+            </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script>

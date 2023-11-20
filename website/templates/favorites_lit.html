@@ -28,10 +28,10 @@
         <a class="logo" href="{{ url_for('index_ctrl.index') }}">搜索分析平台</a>
 
         <nav class="sub-modules">
-            <a href="{{ url_for('relation_ctrl.history', username=username,current_page='web') }}" {% if
-                current_page=='web' %}class="active" {% endif %}>网站历史</a>
-            <a href="{{ url_for('relation_ctrl.history_lit', username=username,current_page='lit') }}" {% if
-                current_page=='lit' %}class="active" {% endif %}>文献历史</a>
+            <a href="{{ url_for('relation_ctrl.favorites', username=username,current_page='web') }}" {% if
+                current_page=='web' %}class="active" {% endif %}>网站收藏</a>
+            <a href="{{ url_for('relation_ctrl.favorites_lit', username=username,current_page='lit') }}" {% if
+                current_page=='lit' %}class="active" {% endif %}>文献收藏</a>
         </nav>
 
         <!-- 用户容器包括用户图标和用户名 -->
@@ -76,20 +76,22 @@
         <div class="results-container">
             <div class="main-results">
                 <dl>
-                    {% for history in web_all %}
+                    {% for favorite in lit_all %}
                     <div class="result-item">
                         <h3>
                             <a
-                                href="{{ url_for('result_ctrl.browse', url = history.link, search_type = 'web', username = username) }}">{{
-                                history.title }}</a>
+                                href="{{ url_for('result_ctrl.browse', url = favorite.link, search_type = 'literature', username = username) }}">{{
+                                favorite.title }}</a>
                         </h3>
                         <div class="result-meta">
                             <span class="meta-item">
-                                来源：{{ history.origin }}
+                                作者：{{ favorite.author }}
                                 &nbsp
-                                {{ history.time}}
+                                {{ favorite.time}}
                                 &nbsp
-                                <a href="/del_web?id={{history.id}}&username={{username}}">删除</a>
+                                <a href="/del_lit_favor?id={{favorite.id}}&username={{username}}">删除</a>
+                                &nbsp
+                                <a href="{{url_for('summary_ctrl.summary', url = favorite.link)}}">总结</a>
                             </span>
                         </div>
                     </div>
@@ -98,7 +100,6 @@
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/darkreader@4.9.67/darkreader.min.js"></script>
     <script>
         // 获取切换按钮元素

@@ -88,6 +88,23 @@
     justify-content: space-between;
     align-items: center;
     height: 60px;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    top: 0;
+}
+
+.main-content {
+    margin-top: 60px; /* 与 header 的高度保持一致 */
+}
+
+.center-container {
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
 }
 
 .logo {

@@ -6,8 +6,9 @@ body {
 }
 
 .container {
+    margin-top: 60px;
     display: flex;
-    height: 92vh;
+    height: 92dvh;
     padding: 20px;
 }
 

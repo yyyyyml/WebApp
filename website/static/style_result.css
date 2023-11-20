@@ -78,6 +78,7 @@
 
 .results-container {
     display: flex;
+    /* align-items: center; */
     width: 100%;
 }
 
@@ -92,8 +93,24 @@
 }
 
 .pagination-links {
-    align-self: center;
-    margin-top: 20px;
+    text-align: center;
+    padding: 20px;
+}
+
+.pagination-links a, .pagination-links .current-page {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 2px;
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.pagination-links .current-page {
+    background-color: #0078d4;
+    color: #fff;
+    border: 1px solid #0078d4;
 }
 /* 添加样式以便隐藏/显示结果 */
 .side-results dl {

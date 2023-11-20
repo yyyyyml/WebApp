@@ -76,20 +76,20 @@
         <div class="results-container">
             <div class="main-results">
                 <dl>
-                    {% for history in web_all %}
+                    {% for history in lit_all %}
                     <div class="result-item">
                         <h3>
                             <a
-                                href="{{ url_for('result_ctrl.browse', url = history.link, search_type = 'web', username = username) }}">{{
+                                href="{{ url_for('result_ctrl.browse', url = history.link, search_type = 'literature', username = username) }}">{{
                                 history.title }}</a>
                         </h3>
                         <div class="result-meta">
                             <span class="meta-item">
-                                来源：{{ history.origin }}
+                                作者：{{ history.author }}
                                 &nbsp
                                 {{ history.time}}
                                 &nbsp
-                                <a href="/del_web?id={{history.id}}&username={{username}}">删除</a>
+                                <a href="/del_lit?id={{history.id}}&username={{username}}">删除</a>
                             </span>
                         </div>
                     </div>
@@ -98,7 +98,6 @@
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/darkreader@4.9.67/darkreader.min.js"></script>
     <script>
         // 获取切换按钮元素

@@ -17,6 +17,39 @@
         h1 {
             margin: 20px 0;
         }
+        .related-search {
+            list-style-type: none;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        
+        .related-search h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .related-items {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .related-item {
+            flex: 0 0 20%; /* 控制每个元素的宽度，这样两个元素加起来不会超过100% */
+            margin-bottom: 10px;
+        }
+        
+        .related-item a {
+            display: block;
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-decoration: none;
+            color: #333;
+        }
+        
+        .related-item a:hover {
+            background-color: #f5f5f5;
+        }
 
     </style>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_header.css') }}">
@@ -59,182 +92,219 @@
             </div>
         </div>
     </header>
-    <form class="search-form" action="{{ url_for('result_ctrl.search_results')}}" method="get">
-        <div class="search-container">
-            <div class="search-box">
-                <input class="search-input" type="text" name="q" placeholder="{{query}}">
-                <input type="hidden" name="pn" value="1">
-                <input type="hidden" name="username" value="{{ username }}">
-                <select class="search-type" name="search_type">
-                    <option value="web">Web</option>
-                    <option value="literature">文献</option>
-                </select>
+    <div class="main-content">
+        <form class="search-form" action="{{ url_for('result_ctrl.search_results')}}" method="get">
+            <div class="search-container">
+                <div class="search-box">
+                    <input class="search-input" type="text" name="q" placeholder="{{query}}">
+                    <input type="hidden" name="pn" value="1">
+                    <input type="hidden" name="username" value="{{ username }}">
+                    <select class="search-type" name="search_type">
+                        <option value="web">网页</option>
+                        <option value="literature">文献</option>
+                    </select>
+                </div>
+                <button class="search-button" type="submit">
+                    <i class="fa fa-search"></i> 搜索
+                </button>
             </div>
-            <button class="search-button" type="submit">
-                <i class="fa fa-search"></i> Search
-            </button>
-        </div>
-    </form>
-    <div class="results-container">
-        <div class="main-results">
-            <dl>
-                {% for key, value in dic.items() %}
-                <div class="result-item">
-                    <h3>
-                        <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
-                    </h3>
-                    <div class="result-meta">
-                        <span class="meta-item">
-                            {% if likemask[key-1]==0 %}
-                            <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
-                            {% elif likemask[key-1]==1 %}
-                            赞过
-                            {% endif %}
-                            &nbsp
-                            <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
-                            &nbsp
-                            {% if favmask[key-1]==0 %}
-                            <a
-                                href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
-                            {% elif favmask[key-1]==1 %}
-                            收藏过
-                            {% endif %}
-                            
-                            <span class="meta-details">{{value["origin"],value["time"]}}</span>
-                        </span>
-                        <p class="result-snippet">{{value["des"]}}</p>
+        </form>
+        <div class="results-container">
+            <div class="main-results">
+                <dl>
+                    {% for key, value in dic.items() %}
+                    <div class="result-item">
+                        <h3>
+                            <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
+                        </h3>
+                        <div class="result-meta">
+                            <span class="meta-item">
+                                {% if likemask[key-1]==0 %}
+                                <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
+                                {% elif likemask[key-1]==1 %}
+                                赞过
+                                {% endif %}
+                                &nbsp
+                                <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
+                                &nbsp
+                                {% if favmask[key-1]==0 %}
+                                <a
+                                    href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
+                                {% elif favmask[key-1]==1 %}
+                                收藏过
+                                {% endif %}
+                                
+                                <span class="meta-details">
+                                    {% if value["origin"] is not none %}
+                                        {{ value["origin"] }}
+                                    {% endif %}
+                                    {% if value["time"] is not none %}
+                                        ，{{ value["time"] }}
+                                    {% endif %}
+                                </span>
+                            </span>
+                            <p class="result-snippet">{{value["des"]}}</p>
+                        </div>
                     </div>
-                </div>
-                {% endfor %}
-            </dl>
-            <ul>
-                <h2>相关推荐</h2>
-                {% for key,value in relate.items() %}
-                <a href="{{ url_for('result_ctrl.search_results',q=value,search_type=search_type,pn=1,username=username) }}">{{value}}</a>
-                {% endfor %}
-            </ul>
-        </div>
-
-        
-        <div class="side-results">
-            <div class="sort-options">
-                <div class="sort-option" data-sort="like">点赞数</div>
-                <div class="sort-option" data-sort="favorite">收藏数</div>
-                <div class="sort-option" data-sort="browse">浏览数</div>
+                    {% endfor %}
+                </dl>
+                <ul class="related-search">
+                    <h2>相关推荐</h2>
+                    <div class="related-items">
+                        {% for key, value in relate.items() %}
+                            <li class="related-item">
+                                <a href="{{ url_for('result_ctrl.search_results', q=value, search_type=search_type, pn=1, username=username) }}">
+                                    {{ value }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </div>
+                </ul>
             </div>
 
-            <dl data-sort="like">
-                <h2>点赞数前三的结果</h2>
-                {% for key, value in dlike.items() %}
-                <div class="result-item">
-                    <h3>
-                        <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
-                    </h3>
-                    <div class="result-meta">
-                        <span class="meta-item">
-                            {% if lm[key-1]==0 %}
-                            <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
-                            {% elif lm[key-1]==1 %}
-                            赞过
-                            {% endif %}
-                            &nbsp
-                            <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
-                            &nbsp
-                            {% if fm[key-1]==0 %}
-                            <a
-                                href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
-                            {% elif fm[key-1]==1 %}
-                            收藏过
-                            {% endif %}
-                            
-                            <span class="meta-details">{{value["origin"],value["time"]}}点赞量:{{likelist[key-1]}}</span>
-                        </span>
-                        <p class="result-snippet">{{value["des"]}}</p>
-                    </div>
-                </div>
-                {% endfor %}
-            </dl>
             
-            <dl data-sort="favorite">
-                <h2>收藏数前三的结果</h2>
-                {% for key, value in dlike.items() %}
-                <div class="result-item">
-                    <h3>
-                        <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
-                    </h3>
-                    <div class="result-meta">
-                        <span class="meta-item">
-                            {% if lm1[key-1]==0 %}
-                            <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
-                            {% elif lm1[key-1]==1 %}
-                            赞过
-                            {% endif %}
-                            &nbsp
-                            <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
-                            &nbsp
-                            {% if fm1[key-1]==0 %}
-                            <a
-                                href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
-                            {% elif fm1[key-1]==1 %}
-                            收藏过
-                            {% endif %}
-                            
-                            <span class="meta-details">{{value["origin"],value["time"]}}收藏量:{{favlist[key-1]}}</span>
-                        </span>
-                        <p class="result-snippet">{{value["des"]}}</p>
-                    </div>
+            <div class="side-results">
+                <div class="sort-options">
+                    <div class="sort-option" data-sort="like">点赞数</div>
+                    <div class="sort-option" data-sort="favorite">收藏数</div>
+                    <div class="sort-option" data-sort="browse">浏览数</div>
                 </div>
-                {% endfor %}
-            </dl>
-            
-            <dl data-sort="browse">
-                <h2>浏览数前三的结果</h2>
-                {% for key, value in dlike.items() %}
-                <div class="result-item">
-                    <h3>
-                        <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
-                    </h3>
-                    <div class="result-meta">
-                        <span class="meta-item">
-                            {% if lm2[key-1]==0 %}
-                            <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
-                            {% elif lm2[key-1]==1 %}
-                            赞过
-                            {% endif %}
-                            &nbsp
-                            <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
-                            &nbsp
-                            {% if fm2[key-1]==0 %}
-                            <a
-                                href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
-                            {% elif fm2[key-1]==1 %}
-                            收藏过
-                            {% endif %}
-                            
-                            <span class="meta-details">{{value["origin"],value["time"]}}浏览量:{{brlist[key-1]}}</span>
-                        </span>
-                        <p class="result-snippet">{{value["des"]}}</p>
-                    </div>
-                </div>
-                {% endfor %}
-            </dl>
 
+                <dl data-sort="like">
+                    <h2>点赞数前三的结果</h2>
+                    {% for key, value in dlike.items() %}
+                    <div class="result-item">
+                        <h3>
+                            <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
+                        </h3>
+                        <div class="result-meta">
+                            <span class="meta-item">
+                                {% if lm[key-1]==0 %}
+                                <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
+                                {% elif lm[key-1]==1 %}
+                                赞过
+                                {% endif %}
+                                &nbsp
+                                <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
+                                &nbsp
+                                {% if fm[key-1]==0 %}
+                                <a
+                                    href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
+                                {% elif fm[key-1]==1 %}
+                                收藏过
+                                {% endif %}
+                                
+                                <span class="meta-details">
+                                    {% if value["origin"] is not none %}
+                                    {{ value["origin"] }}
+                                    {% endif %}
+                                    {% if value["time"] is not none %}
+                                        ，{{ value["time"] }}
+                                    {% endif %}， 点赞量：{{likelist[key-1]}}
+                                </span>
+                            </span>
+                            <p class="result-snippet">{{value["des"]}}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </dl>
+                
+                <dl data-sort="favorite">
+                    <h2>收藏数前三的结果</h2>
+                    {% for key, value in dlike.items() %}
+                    <div class="result-item">
+                        <h3>
+                            <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
+                        </h3>
+                        <div class="result-meta">
+                            <span class="meta-item">
+                                {% if lm1[key-1]==0 %}
+                                <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
+                                {% elif lm1[key-1]==1 %}
+                                赞过
+                                {% endif %}
+                                &nbsp
+                                <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
+                                &nbsp
+                                {% if fm1[key-1]==0 %}
+                                <a
+                                    href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
+                                {% elif fm1[key-1]==1 %}
+                                收藏过
+                                {% endif %}
+                                
+                                <span class="meta-details">
+                                    {% if value["origin"] is not none %}
+                                    {{ value["origin"] }}
+                                    {% endif %}
+                                    {% if value["time"] is not none %}
+                                        ，{{ value["time"] }}
+                                    {% endif %}， 收藏量：{{favlist[key-1]}}
+                                </span>
+                            </span>
+                            <p class="result-snippet">{{value["des"]}}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </dl>
+                
+                <dl data-sort="browse">
+                    <h2>浏览数前三的结果</h2>
+                    {% for key, value in dlike.items() %}
+                    <div class="result-item">
+                        <h3>
+                            <a href='/browse?url={{value["url"]}}&search_type={{search_type}}&username={{username}}&title={{value["title"]}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>{{value["title"]}}</a>
+                        </h3>
+                        <div class="result-meta">
+                            <span class="meta-item">
+                                {% if lm2[key-1]==0 %}
+                                <a href='/good?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>赞</a>
+                                {% elif lm2[key-1]==1 %}
+                                赞过
+                                {% endif %}
+                                &nbsp
+                                <a href='/bad?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>踩</a>
+                                &nbsp
+                                {% if fm2[key-1]==0 %}
+                                <a
+                                    href='/favorite?url={{value["url"]}}&title={{value["title"]}}&query={{query}}&search_type={{search_type}}&pn={{pn}}&username={{username}}&origin={{value["origin"]}}&snippet={{value["snippet"]}}&time_origin={{value["time"]}}'>收藏</a>
+                                {% elif fm2[key-1]==1 %}
+                                收藏过
+                                {% endif %}
+                                
+                                <span class="meta-details">
+                                    {% if value["origin"] is not none %}
+                                    {{ value["origin"] }}
+                                    {% endif %}
+                                    {% if value["time"] is not none %}
+                                        ，{{ value["time"] }}
+                                    {% endif %}， 浏览量：{{brlist[key-1]}}
+                                </span>
+                            </span>
+                            <p class="result-snippet">{{value["des"]}}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </dl>
+
+            </div>
         </div>
-    </div>
 
-    <div class="pagination-links">
-        {% if pn>1 %}
-            <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn-1),username=username)}}">上一页</a>
+        <div class="pagination-links">
+            {% if pn > 1 %}
+                <a class="page-item" href="{{ url_for('result_ctrl.search_results', q=query, search_type=search_type, pn=(pn-1), username=username) }}">上一页</a>
             {% endif %}
-        {% for i in range(1,6) %}
-            {% if i!=pn %}
-            <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=i,username=username) }}">{{i}}</a>
-            {% endif %}
+            {% for i in range(1, 6) %}
+                {% if i == pn %}
+                    <strong><span class="page-item current-page">{{ i }}</span></strong>
+                {% else %}
+                    <a class="page-item" href="{{ url_for('result_ctrl.search_results', q=query, search_type=search_type, pn=i, username=username) }}">{{ i }}</a>
+                {% endif %}
             {% endfor %}
-        {% if pn<5 %}
-            <a href="{{ url_for('result_ctrl.search_results',q=query,search_type=search_type,pn=(pn+1),username=username) }}">下一页</a>
+            {% if pn < 5 %}
+                <a class="page-item" href="{{ url_for('result_ctrl.search_results', q=query, search_type=search_type, pn=(pn+1), username=username) }}">下一页</a>
             {% endif %}
-
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script>
