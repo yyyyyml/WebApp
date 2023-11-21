@@ -128,11 +128,11 @@
             <td>{{ user.username }}</td>
             <td>{{ user.permission }}</td>
             <td>
-                <form method="post" action="{{ url_for('manage_ctrl.logout_user') }}">
+                <form method="post" action="{{ url_for('manage_ctrl.logout_user', rootname=username) }}">
                     <input type="hidden" name="username" value="{{ user.username }}">
                     <button type="submit" class="logout-btn">注销</button>
                 </form>
-                <form method="post" action="{{ url_for('manage_ctrl.update_permission') }}">
+                <form method="post" action="{{ url_for('manage_ctrl.update_permission', rootname=username) }}">
                     <input type="hidden" name="username" value="{{ user.username }}">
                     <select name="new_permission" class="permission-select">
                         <option value="user">User</option>

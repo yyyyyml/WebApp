@@ -20,24 +20,26 @@ def manage():
 def logout_user():
     if request.method == 'POST':
         username = request.form.get('username')
+        rootname = request.args.get('rootname')
         # 执行注销用户的操作
         user_db = get_user_database()
         user_db.delete_user(username)
-        flash(f'User {username} has been logged out.', 'success')
+        # flash(f'用户{username}已被注销', 'success')
 
-    return redirect(url_for('manage_ctrl.manage_user'))
+    return redirect(url_for('manage_ctrl.manage_user', username=rootname))
 
 @manage_ctrl.route('/update_permission', methods=['POST'])
 def update_permission():
     if request.method == 'POST':
         username = request.form.get('username')
+        rootname = request.args.get('rootname')
         new_permission = request.form.get('new_permission')
         # 执行修改用户权限的操作
         user_db = get_user_database()
         user_db.update_permission(username, new_permission)
-        flash(f'Permission for user {username} has been updated.', 'success')
+        # flash(f'用户{username}的权限已更新', 'success')
 
-    return redirect(url_for('manage_ctrl.manage_user'))
+    return redirect(url_for('manage_ctrl.manage_user', username=rootname))
 
 @manage_ctrl.route('/manage_user')
 def manage_user():

@@ -26,7 +26,7 @@ def login():
             else:
                 return redirect(url_for('manage_ctrl.manage_status', username=username, current_page ='manage_status'))
 
-        flash('Login failed. Check your username and password.', 'danger')
+        flash('登录失败！请检查用户名和密码', 'danger')
 
     return render_template('login.html')
 
@@ -40,12 +40,12 @@ def register():
         existing_user = user_db.get_user(username)
 
         if existing_user:
-            flash('Username already exists. Choose a different one.', 'danger')
+            flash('注册失败，用户名已存在！', 'danger')
         else:
             # Hash the password before storing it
             hashed_password = password
             user_db.add_user(username, hashed_password)
-            flash('Registration successful!', 'success')
+            flash('已成功注册，请登录！', 'success')
             return redirect(url_for('auth_ctrl.login'))
 
     return render_template('register.html')
@@ -57,7 +57,7 @@ def profile():
         user_db = get_user_database()
         user = user_db.get_user(username)
         return render_template('profile.html', user=user)
-    return 'You are not logged in'
+    return '您未登录'
 
 # 清除用户登录状态
 @auth_ctrl.route('/logout')

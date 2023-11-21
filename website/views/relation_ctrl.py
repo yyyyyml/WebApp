@@ -148,3 +148,26 @@ def judge():
         return redirect(url_for('index_ctrl.index'))
 
     return render_template('judge.html',username=username)
+
+@relation_ctrl.route('/browse_no_item')
+def browse_no_item():
+    url = request.args.get('url')
+    search_type = request.args.get('search_type')
+    username = request.args.get('username')
+    title = request.args.get('title')
+    # print(username)
+    if search_type == 'web':
+        web_db = database.get_web_browse_database()
+        time = datetime.datetime.now()
+        time_now = str(time.year) + '.' + str(time.month) + '.' + str(time.day) + ',' + str(time.hour) + ':' + str(
+            time.minute)
+        web_db.add_web_browse(username, url, time_now)
+        # print('done')
+        return redirect(url)
+    elif search_type == 'literature':
+        lit_db = database.get_literature_browse_database()
+        time = datetime.datetime.now()
+        time_now = str(time.year) + '.' + str(time.month) + '.' + str(time.day) + ',' + str(time.hour) + ':' + str(
+            time.minute)
+        lit_db.add_literature_browse(username, url, time_now)
+        return redirect(url)
